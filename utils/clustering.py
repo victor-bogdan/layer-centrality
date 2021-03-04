@@ -1,19 +1,19 @@
+import matplotlib.pyplot as plt
+from seaborn import lmplot
+from pandas import DataFrame, Series
 from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
-
-from utils.layer_centrality import *
+from uunet.multinet import read, vertices, to_nx_dict
+from utils.layer_centrality import compute_multinet_layer_centrality
 
 
-def computeClusters(targetsShapleyValueDict, numberOfPCs, numberOfClusters):
-    targets_df = pd.DataFrame.from_dict(targetsShapleyValueDict).T
+def compute_clusters(targetsShapleyValueDict, numberOfPCs, numberOfClusters):
+    targets_df = DataFrame.from_dict(targetsShapleyValueDict).T
     # Normalise data
     targetsDF = StandardScaler().fit_transform(targets_df)
     clusterLables = computeKMeans(targetsDF, numberOfPCs, numberOfClusters)
-    targets_df['Cluster Class'] = pd.Series(clusterLables, index=targets_df.index)
+    targets_df['Cluster Class'] = Series(clusterLables, index=targets_df.index)
     return targets_df
 
 
@@ -21,11 +21,11 @@ def computePCA(targetsDF, numberOfPCs):
     pca = PCA(n_components=numberOfPCs)
     principalComponents = pca.fit_transform(targetsDF)
 
-    return pd.DataFrame(principalComponents)
+    return DataFrame(principalComponents)
 
 
 def testPCA(targetsShapleyValueDict):
-    targets_df = pd.DataFrame.from_dict(targetsShapleyValueDict).T
+    targets_df = DataFrame.from_dict(targetsShapleyValueDict).T
     # Normalise data
     targetsDF = StandardScaler().fit_transform(targets_df)
     pca = PCA(n_components=len(targetsDF[1]))
@@ -55,9 +55,9 @@ def computeKMeans(targetsDF, numberOfPCs=1, nubmerOfClusters=1):
             clusterLabels.labels_[i]]
         )
 
-    plotDataDF = pd.DataFrame(plotData, columns=plotData.pop(0))
+    plotDataDF = DataFrame(plotData, columns=plotData.pop(0))
 
-    sns.lmplot(data=plotDataDF, x='x', y='y', hue='Cluster Class', fit_reg=False, legend=True, legend_out=True)
+    lmplot(data=plotDataDF, x='x', y='y', hue='Cluster Class', fit_reg=False, legend=True, legend_out=True)
     plt.show()
     '''
     plt.scatter(principalComponents[0], principalComponents[1], c=clusterLabels.labels_)
@@ -71,7 +71,7 @@ def computeKMeans(targetsDF, numberOfPCs=1, nubmerOfClusters=1):
 
 # Used for 'elbow rule'
 def testNumberOfClusters(targetsShapleyValueDict, numberOfPCs, maxNumberOfClusters):
-    targets_df = pd.DataFrame.from_dict(targetsShapleyValueDict).T
+    targets_df = DataFrame.from_dict(targetsShapleyValueDict).T
     # Normalise data
     targetsDF = StandardScaler().fit_transform(targets_df)
     principalComponents = computePCA(targetsDF, numberOfPCs)
@@ -94,11 +94,11 @@ def testNumberOfClusters(targetsShapleyValueDict, numberOfPCs, maxNumberOfCluste
 
 
 if __name__ == "__main__":
-    multilayeredNetwork = ml.read("resources/test.txt")
-    nodeList = sorted(set(ml.vertices(multilayeredNetwork)["actor"]))
-    layers = ml.to_nx_dict(multilayeredNetwork)
-    targetsShapleyValueDict = computeMultinetShapleyForTargets(layers, nodeList)
+    multilayeredNetwork = read("../resources/test.txt")
+    nodeList = sorted(set(vertices(multilayeredNetwork)["actor"]))
+    layers = to_nx_dict(multilayeredNetwork)
+    targetsShapleyValueDict = compute_multinet_layer_centrality(layers, nodeList)
     # testPCA(targetsShapleyValueDict)
     # testNumberOfClusters(targetsShapleyValueDict, 2, len(targetsShapleyValueDict))
-    targetsClusterDataFrame = computeClusters(targetsShapleyValueDict, 2, 3)
+    targetsClusterDataFrame = compute_clusters(targetsShapleyValueDict, 2, 3)
     print(targetsClusterDataFrame)

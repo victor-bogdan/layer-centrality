@@ -1,6 +1,6 @@
-import uunet.multinet as ml
 from itertools import combinations, permutations
-import networkx as nx
+from uunet.multinet import empty, add_nx_layer, flatten, layers, to_nx_dict, read, vertices
+from networkx import degree
 
 
 def create_layer_combinations_node_centrality_dict(nx_layer_dict):
@@ -55,19 +55,19 @@ def compute_flattened_layer_combination_node_centrality(nx_layer_dict, layer_com
              combination of layers.
     """
 
-    temp_multilayered_network = ml.empty()
+    temp_multilayered_network = empty()
 
     for layer in layer_combination_tuple:
-        ml.add_nx_layer(temp_multilayered_network, nx_layer_dict[layer], layer)
+        add_nx_layer(temp_multilayered_network, nx_layer_dict[layer], layer)
 
-    ml.flatten(temp_multilayered_network, "flattened_layer", layers=ml.layers(temp_multilayered_network))
+    flatten(temp_multilayered_network, "flattened_layer", layers=layers(temp_multilayered_network))
 
-    flattened_layer = ml.to_nx_dict(temp_multilayered_network)["flattened_layer"]
+    flattened_layer = to_nx_dict(temp_multilayered_network)["flattened_layer"]
     # print(nx.degree_centrality(flattened_layer))
     # print(nx.degree(flattened_layer), "\n")
 
     # TODO for any given centrality measure function
-    degree_view = nx.degree(flattened_layer)
+    degree_view = degree(flattened_layer)
     flattened_layer_degree_dict = {}
 
     for degree_tuple in degree_view:
@@ -165,7 +165,7 @@ def compute_shapley_for_tuple(layer_permutation_tuple, layer_combinations_tuple_
 
 
 if __name__ == "__main__":
-    multilayeredNetwork = ml.read("../resources/test.txt")
-    nodeList = sorted(set(ml.vertices(multilayeredNetwork)["actor"]))
-    layers = ml.to_nx_dict(multilayeredNetwork)
+    multilayeredNetwork = read("../resources/test.txt")
+    nodeList = sorted(set(vertices(multilayeredNetwork)["actor"]))
+    layers = to_nx_dict(multilayeredNetwork)
     print(compute_multinet_layer_centrality(layers, nodeList))
