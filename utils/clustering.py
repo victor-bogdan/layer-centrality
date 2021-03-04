@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import seaborn as sns
 
-from combinations import *
+from utils.layer_centrality import *
 
 
 def computeClusters(targetsShapleyValueDict, numberOfPCs, numberOfClusters):
@@ -94,7 +94,7 @@ def testNumberOfClusters(targetsShapleyValueDict, numberOfPCs, maxNumberOfCluste
 
 
 if __name__ == "__main__":
-    multilayeredNetwork = ml.read("test.txt")
+    multilayeredNetwork = ml.read("resources/test.txt")
     nodeList = sorted(set(ml.vertices(multilayeredNetwork)["actor"]))
     layers = ml.to_nx_dict(multilayeredNetwork)
     targetsShapleyValueDict = computeMultinetShapleyForTargets(layers, nodeList)
