@@ -1,6 +1,5 @@
 import uunet.multinet as ml
 import networkx as nx
-import matplotlib.pyplot as plt
 
 multilayeredNetwork = ml.read("test.txt")
 layers = ml.to_nx_dict(multilayeredNetwork)
