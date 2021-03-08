@@ -1,8 +1,8 @@
 from pandas import DataFrame, Series
 from uunet.multinet import read, vertices, to_nx_dict
-from utils.layer_centrality import compute_multinet_layer_centrality
-from utils.analysis import compute_shannon_entropy
-from utils.clustering import compute_clusters
+from algo.layer_centrality import compute_multinet_layer_centrality
+from algo.analysis import compute_shannon_entropy
+from algo.clustering import compute_clusters
 
 multi_layered_network = read("resources/test.txt")
 nodeList = sorted(set(vertices(multi_layered_network)["actor"]))

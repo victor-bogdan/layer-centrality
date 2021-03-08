@@ -6,7 +6,7 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from uunet.multinet import read, vertices, to_nx_dict
-from utils.layer_centrality import compute_multinet_layer_centrality
+from algo.layer_centrality import compute_multinet_layer_centrality
 
 
 def compute_clusters(nodes_layer_centrality_dict, number_of_pcs, number_of_clusters, show_plot=False):
