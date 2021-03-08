@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from numpy import nancumsum
 from seaborn import lmplot
 from pandas import DataFrame
 from sklearn.cluster import KMeans
@@ -8,7 +9,7 @@ from uunet.multinet import read, vertices, to_nx_dict
 from utils.layer_centrality import compute_multinet_layer_centrality
 
 
-def compute_clusters(nodes_layer_centrality_dict, number_of_pcs, number_of_clusters):
+def compute_clusters(nodes_layer_centrality_dict, number_of_pcs, number_of_clusters, show_plot=False):
     """
     Computes clusters of nodes using their layer centrality.
 
@@ -16,12 +17,13 @@ def compute_clusters(nodes_layer_centrality_dict, number_of_pcs, number_of_clust
     each layer for a set of nodes.
     :param number_of_pcs: Number of principal components.
     :param number_of_clusters: Number of clusters.
+    :param show_plot: Flag for plotting of the clusters.
     :return:
     """
 
     nodes_layer_centrality_data_frame = DataFrame.from_dict(nodes_layer_centrality_dict).T
     nodes_cluster_label_dictionary = \
-        perform_kmeans(nodes_layer_centrality_data_frame, number_of_pcs, number_of_clusters)
+        perform_kmeans(nodes_layer_centrality_data_frame, number_of_pcs, number_of_clusters, show_plot)
 
     return nodes_cluster_label_dictionary
 
@@ -69,6 +71,11 @@ def analyze_pca(nodes_layer_centrality_dict):
     plt.xlabel('Principal Components')
     plt.ylabel('Variance %')
     plt.xticks(features)
+    plt.show()
+
+    plt.plot(nancumsum(pca.explained_variance_ratio_))
+    plt.xlabel('Number of components')
+    plt.ylabel('Cumulative explained variance')
     plt.show()
 
 
@@ -157,5 +164,5 @@ if __name__ == "__main__":
     node_list = sorted(set(vertices(multilayered_network)["actor"]))
     layers = to_nx_dict(multilayered_network)
     nodes_layer_centrality_dict_test = compute_multinet_layer_centrality(layers, node_list)
-    nodes_cluster_label_dictionary_test = compute_clusters(nodes_layer_centrality_dict_test, 2, 3)
+    nodes_cluster_label_dictionary_test = compute_clusters(nodes_layer_centrality_dict_test, 3, 3, False)
     print(nodes_cluster_label_dictionary_test)
