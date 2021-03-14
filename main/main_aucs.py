@@ -21,13 +21,16 @@ nodes_cluster_label_dict = compute_clusters(nodes_layer_centrality_dict, 3, 3, F
 draw_all_layers("aucs", multilayered_network, True)
 
 results_data_frame = DataFrame.from_dict(nodes_layer_centrality_dict).T.sort_index(axis=1)
-results_data_frame['Shannon Entropy'] = Series(nodes_shannon_entropy_dict, index=results_data_frame.index)
-results_data_frame['Cluster Class'] = Series(nodes_cluster_label_dict, index=results_data_frame.index)
+results_data_frame['shannon_entropy'] = Series(nodes_shannon_entropy_dict, index=results_data_frame.index)
+results_data_frame['cluster_class'] = Series(nodes_cluster_label_dict, index=results_data_frame.index)
+results_data_frame.loc['mean'] = results_data_frame.mean()
+results_data_frame = results_data_frame.round(2)
 
 plot_results_histograms(DATASET_NAME, CENTRALITY_MEASURE, results_data_frame,
-                        vertices(multilayered_network)["layer"], 20, 5, True)
-plot_results_histograms(DATASET_NAME, CENTRALITY_MEASURE, results_data_frame,
-                        "Shannon Entropy", 3, 1, True)
+                        vertices(multilayered_network)["layer"], 'Centrality Value', 'Number of Nodes',
+                        20, 5, True)
+plot_results_histograms(DATASET_NAME, CENTRALITY_MEASURE, results_data_frame, 'shannon_entropy',
+                        'Shannon Entropy Value', 'Number of Nodes', 3, 1, True)
 
 save_results_data_frame(DATASET_NAME, CENTRALITY_MEASURE, results_data_frame)
 

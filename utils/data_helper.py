@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from uunet.multinet import vertices
 from uunet.multinet import to_nx_dict
 from networkx import draw
+from os.path import dirname
 
 
 def print_node_layers(node, multilayered_network):
@@ -43,4 +44,6 @@ def draw_all_layers(
         plt.show()
 
         if save_to_disk:
-            plt.savefig("./results/{0}/{0}_{1}_layer".format(data_set_name, layer_name))
+            project_root_path = dirname(dirname(__file__))
+
+            plt.savefig("{0}/results/{1}/{1}_{2}_layer".format(project_root_path, data_set_name, layer_name))

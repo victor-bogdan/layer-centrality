@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from os.path import dirname
 
 
 def plot_results_histograms(
@@ -6,6 +7,8 @@ def plot_results_histograms(
         centrality_measure,
         results_data_frame,
         selected_columns,
+        x_axis_label,
+        y_axis_label,
         number_of_bins,
         step_size,
         save_to_disk=False
@@ -17,6 +20,8 @@ def plot_results_histograms(
     :param centrality_measure: Name of the used centrality measure.
     :param results_data_frame: Dataframe containing all results.
     :param selected_columns: The selected columns for which the histograms are plotted.
+    :param x_axis_label: String for the x axis histogram label
+    :param y_axis_label: String for the y axis histogram label
     :param number_of_bins: Number of bins for the histogram.
     :param step_size: Step size for creating the bins.
     :param save_to_disk: Flag for enabling/disabling saving plots to disk.
@@ -30,12 +35,17 @@ def plot_results_histograms(
     for column_key in results_data_frame_dict.keys():
         if column_key in selected_columns:
             plt.title("{0}".format(column_key))
-            plt.hist(list(results_data_frame_dict[column_key].values()), bins)
+            plt.xlabel(x_axis_label)
+            plt.ylabel(y_axis_label)
+            plt.hist(list(results_data_frame_dict[column_key].values()),
+                     bins, histtype='bar', edgecolor='black')
             plt.show()
 
             if save_to_disk:
-                plt.savefig("./results/{0}/{1}/{0}_{2}_histogram".format(
-                    data_set_name, centrality_measure, column_key))
+                project_root_path = dirname(dirname(__file__))
+
+                plt.savefig("{0}/results/{1}/{2}/{1}_{3}_{2}_histogram".format(
+                    project_root_path, data_set_name, centrality_measure, column_key))
 
 
 def save_results_data_frame(data_set_name, centrality_measure, results_data_frame):
@@ -48,8 +58,9 @@ def save_results_data_frame(data_set_name, centrality_measure, results_data_fram
     :return: void
     """
 
-    results_data_frame.to_csv(
-        './results/{0}/{1}/{0}_results_{1}.csv'.format(data_set_name, centrality_measure),
-        encoding='utf-16'
-    )
+    project_root_path = dirname(dirname(__file__))
+
+    results_data_frame.to_csv('{0}/results/{1}/{2}/{1}_results_{2}.csv'.format(
+        project_root_path, data_set_name, centrality_measure), encoding='utf-16')
+
     print(results_data_frame)
