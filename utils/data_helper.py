@@ -1,7 +1,25 @@
 import matplotlib.pyplot as plt
 from uunet.multinet import vertices, to_nx_dict
-from networkx import draw, nx_agraph
+from networkx import draw, nx_agraph, neighbors
 from os.path import dirname
+
+
+def get_node_connections_on_layers(layers_dict, node):
+    """
+
+    :param layers_dict: Dictionary containing networkx layers.
+    :param node: String representing a node.
+    :return: Dictionary containing all nodes connected to the given node on all layers in
+    :param layers_dict as sets.
+    """
+
+    node_layer_connections_dict = {}
+
+    for layer in layers_dict.keys():
+        if layers_dict[layer].has_node(node):
+            node_layer_connections_dict[layer] = set([n for n in neighbors(layers_dict[layer], node)])
+
+    return node_layer_connections_dict
 
 
 def print_node_layers(node, multilayered_network):

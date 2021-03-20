@@ -1,8 +1,13 @@
 import matplotlib.pyplot as plt
 from uunet.multinet import to_nx_dict
 from networkx import draw, nx_agraph
-from pandas import ExcelWriter
+from pandas import set_option, ExcelWriter, DataFrame
+from utils.data_helper import get_node_connections_on_layers
 from os.path import dirname
+
+# Module scope settings
+set_option('display.width', 400)
+set_option('max.columns', 10)
 
 """
 Dictionary containing settings for each class of nodes.
@@ -192,3 +197,46 @@ def save_results_data_frame_as_xlsx(
     writer.save()
 
     print(results_data_frame)
+
+
+def get_node_layer_centrality_analysis(
+        layers_dict,
+        nodes_layer_centrality_dict,
+        node
+):
+    """
+
+    :param layers_dict: Dictionary containing networkx layers
+    :param nodes_layer_centrality_dict: Dictionary of dictionaries containing the centrality of
+    each layer for a set of nodes.
+    :param node: String representing a node.
+    :return:
+    """
+
+    node_layer_centrality_analysis_dict = {}
+
+    node_layer_connections_dict = get_node_connections_on_layers(layers_dict, node)
+
+    # Compute unique node connections per layer
+    for layer_key in node_layer_connections_dict.keys():
+
+        temp_layer_connections_dict = node_layer_connections_dict.copy()
+        temp_layer_connections_dict.pop(layer_key)  # exclude current layer
+        temp_set = set.union(*[a for a in temp_layer_connections_dict.values()])
+
+        # print(len(set.union(node_layer_centrality_analysis_dict[layer_key], temp_set)))
+
+        temp_layer_data_dict = {
+            'Total number of connections': len(node_layer_connections_dict[layer_key]),
+            'Layer Centrality': nodes_layer_centrality_dict[node][layer_key],
+            'Number of unique node connections': len(node_layer_connections_dict[layer_key] - temp_set),
+            'Unique node connections': node_layer_connections_dict[layer_key] - temp_set
+        }
+
+        node_layer_centrality_analysis_dict[layer_key] = temp_layer_data_dict
+
+    results_data_frame = DataFrame.from_dict(node_layer_centrality_analysis_dict).T.sort_index(axis=0)
+    results_data_frame.columns.name = "Node " + node
+
+    print(results_data_frame)
+
