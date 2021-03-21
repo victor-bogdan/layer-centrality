@@ -6,8 +6,8 @@ from utils.data_helper import get_node_connections_on_layers
 from os.path import dirname
 
 # Module scope settings
-set_option('display.width', 400)
-set_option('max.columns', 10)
+set_option('display.width', 1000)
+set_option('max.columns', 20)
 
 """
 Dictionary containing settings for each class of nodes.
@@ -199,7 +199,7 @@ def save_results_data_frame_as_xlsx(
     print(results_data_frame)
 
 
-def get_node_layer_centrality_analysis(
+def get_node_degree_centrality_analysis(
         layers_dict,
         nodes_layer_centrality_dict,
         node
@@ -217,6 +217,49 @@ def get_node_layer_centrality_analysis(
 
     node_layer_connections_dict = get_node_connections_on_layers(layers_dict, node)
 
+    # Init analysis dicts
+    for layer_key in node_layer_connections_dict.keys():
+
+        temp_layer_data_dict = {
+            'Total number of connections': len(node_layer_connections_dict[layer_key]),
+            'Layer Centrality': nodes_layer_centrality_dict[node][layer_key],
+        }
+
+        for index in range(len(node_layer_connections_dict.keys())):
+            temp_layer_data_dict['Number of nodes of order {0}'.format(index+1)] = 0
+            temp_layer_data_dict['Nodes of order {0}'.format(index+1)] = []
+
+        node_layer_centrality_analysis_dict[layer_key] = temp_layer_data_dict
+
+    # Get all unique connected nodes
+    connected_nodes_set = set.union(*[a for a in node_layer_connections_dict.values()])
+
+    # For each connected node, get the layers on which it is present
+    node_layers_dict = {}
+
+    for connected_node in connected_nodes_set:
+
+        temp_node_layer_dict = {
+            'layers': []
+        }
+
+        for layer_key in node_layer_connections_dict:
+            if connected_node in node_layer_connections_dict[layer_key]:
+                temp_node_layer_dict['layers'].append(layer_key)
+
+        node_layers_dict[connected_node] = temp_node_layer_dict
+
+    # Compute for each layer how many nodes of each order it contains
+    for node_key in node_layers_dict:
+        number_of_layers = len(node_layers_dict[node_key]['layers'])
+
+        for layer_name in node_layers_dict[node_key]['layers']:
+            node_layer_centrality_analysis_dict[layer_name][
+                'Number of nodes of order {0}'.format(number_of_layers)] += 1
+            node_layer_centrality_analysis_dict[layer_name][
+                'Nodes of order {0}'.format(number_of_layers)].append(node_key)
+
+    '''
     # Compute unique node connections per layer
     for layer_key in node_layer_connections_dict.keys():
 
@@ -234,6 +277,7 @@ def get_node_layer_centrality_analysis(
         }
 
         node_layer_centrality_analysis_dict[layer_key] = temp_layer_data_dict
+    '''
 
     results_data_frame = DataFrame.from_dict(node_layer_centrality_analysis_dict).T.sort_index(axis=0)
     results_data_frame.columns.name = "Node " + node
