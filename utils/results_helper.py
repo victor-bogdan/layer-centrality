@@ -10,9 +10,9 @@ set_option('display.width', 1000)
 set_option('max.columns', 20)
 
 """
-Dictionary containing settings for each class of nodes.
+Dictionary containing settings for each class of layer influence.
 """
-NODE_CLASS_SETTINGS_DICT = {
+LAYER_INFLUENCE_CLASS_SETTINGS_DICT = {
     1: {'min_centrality_value': 75, 'node_color': '#DD3827', 'xlsx_format': {'bg_color': '#DD3827'}},
     2: {'min_centrality_value': 50, 'node_color': '#EFA811', 'xlsx_format': {'bg_color': '#EFA811'}},
     3: {'min_centrality_value': 30, 'node_color': '#F7F304', 'xlsx_format': {'bg_color': '#F7F304'}},
@@ -20,18 +20,17 @@ NODE_CLASS_SETTINGS_DICT = {
 }
 
 
-def get_node_class(layer_centrality):
+def get_layer_influence_class(layer_centrality):
     """
-    Returns the node class based on the layer centrality of the respective node in a multilayered
-    network.
+    Returns the layer influence class based on the given :param layer_centrality.
 
-    :param layer_centrality: Maximum layer centrality for a node in a multilayered network
-    :return: String representing node class
+    :param layer_centrality: Layer centrality for a node in a multilayered network.
+    :return: Integer representing layer influence class.
     """
 
-    for node_class in NODE_CLASS_SETTINGS_DICT.keys():
-        if layer_centrality >= NODE_CLASS_SETTINGS_DICT[node_class]['min_centrality_value']:
-            return node_class
+    for layer_influence_class in LAYER_INFLUENCE_CLASS_SETTINGS_DICT.keys():
+        if layer_centrality >= LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['min_centrality_value']:
+            return layer_influence_class
 
 
 def draw_results_layers(
@@ -43,7 +42,7 @@ def draw_results_layers(
 ):
     """
     Plots all layers in the given multilayered network and applies the settings for each node based on
-    its class.
+    its layer influence class.
 
     :param data_set_name: Name of the data set.
     :param centrality_measure: Name of the used centrality measure.
@@ -62,8 +61,8 @@ def draw_results_layers(
         color_map = []
 
         for node in layer:
-            node_class = get_node_class(nodes_layer_centrality_dict[node][layer_name])
-            color_map.append(NODE_CLASS_SETTINGS_DICT[node_class]['node_color'])
+            layer_influence_class = get_layer_influence_class(nodes_layer_centrality_dict[node][layer_name])
+            color_map.append(LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['node_color'])
 
         # Set fig size 1920x1080 pixels
         plt.figure(figsize=(16, 9), dpi=120)
@@ -266,8 +265,8 @@ def save_results_data_frame_as_xlsx(
     workbook = writer.book
     worksheet = writer.sheets['LayerCentrality']
 
-    for node_class in NODE_CLASS_SETTINGS_DICT.keys():
-        temp_format = workbook.add_format(NODE_CLASS_SETTINGS_DICT[node_class]['xlsx_format'])
+    for layer_influence_class in LAYER_INFLUENCE_CLASS_SETTINGS_DICT.keys():
+        temp_format = workbook.add_format(LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['xlsx_format'])
 
         worksheet.conditional_format(
             start_row,
@@ -277,7 +276,7 @@ def save_results_data_frame_as_xlsx(
             {
                 'type': 'cell',
                 'criteria': '>=',
-                'value': NODE_CLASS_SETTINGS_DICT[node_class]['min_centrality_value'],
+                'value': LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['min_centrality_value'],
                 'format': temp_format
             }
         )
