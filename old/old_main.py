@@ -2,7 +2,7 @@ import uunet.multinet as ml
 import networkx as nx
 import matplotlib.pyplot as plt
 
-n = ml.read("test.txt")
+n = ml.read("../resources/test.txt")
 
 ml.plot(n, vertex_labels_bbox={"boxstyle": 'round4', "fc": 'white'})
 
