@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
-from uunet.multinet import to_nx_dict
+from matplotlib.lines import Line2D
+from uunet.multinet import to_nx_dict, flatten, layers
 from networkx import draw, nx_agraph
-from pandas import set_option, ExcelWriter, DataFrame
-from utils.data_helper import get_node_connections_on_layers
+from pandas import set_option, ExcelWriter
 from os.path import dirname
 
 # Module scope settings
@@ -53,10 +53,10 @@ def draw_results_layers(
     :return: void
     """
 
-    layers = to_nx_dict(multilayered_network)
+    layer_dict = to_nx_dict(multilayered_network)
 
-    for layer_name in layers.keys():
-        layer = layers[layer_name]
+    for layer_name in layer_dict.keys():
+        layer = layer_dict[layer_name]
 
         color_map = []
 
@@ -64,12 +64,25 @@ def draw_results_layers(
             layer_influence_class = get_layer_influence_class(nodes_layer_centrality_dict[node][layer_name])
             color_map.append(LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['node_color'])
 
+        # Construct plot legend
+        legend_circles = []
+        legend_labels = []
+
+        for layer_influence_class in LAYER_INFLUENCE_CLASS_SETTINGS_DICT.keys():
+            legend_circles.append(Line2D([0], [0], color='w', marker='o', markerfacecolor=
+                LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['node_color'], markersize=12))
+            legend_labels.append('Layer influence > {0}%'.format(
+                LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['min_centrality_value']))
+
         # Set fig size 1920x1080 pixels
         plt.figure(figsize=(16, 9), dpi=120)
         plt.title("Layer: {0}".format(layer_name))
-        # plt.figure(figsize=(16, 9), dpi=120)
+
         pos = nx_agraph.graphviz_layout(layer, prog='neato')
+
         draw(layer, node_color=color_map, pos=pos, with_labels=True)
+
+        plt.legend(legend_circles, legend_labels)
 
         if save_to_disk:
             project_root_path = dirname(dirname(__file__))
@@ -80,92 +93,62 @@ def draw_results_layers(
         plt.show()
 
 
-def get_node_degree_centrality_analysis(
-        layers_dict,
-        nodes_layer_centrality_dict,
-        node
+def draw_flattened_network_clustering_results(
+        data_set_name,
+        centrality_measure,
+        multilayered_network,
+        nodes_cluster_label_dict,
+        save_to_disk=False
 ):
     """
+    Plots the flattened network with each node colored according to its cluster class. Cluster classes
+    should be integers and start from 0.
 
-    :param layers_dict: Dictionary containing networkx layers
-    :param nodes_layer_centrality_dict: Dictionary of dictionaries containing the centrality of
-    each layer for a set of nodes.
-    :param node: String representing a node.
-    :return:
+    :param data_set_name: Name of the data set.
+    :param centrality_measure: Name of the used centrality measure.
+    :param multilayered_network: Multilayered network.
+    :param nodes_cluster_label_dict: Dictionary containing nodes and their cluster classes.
+    :param save_to_disk: Flag for enabling/disabling saving plots to disk.
     """
 
-    node_layer_centrality_analysis_dict = {}
+    cluster_colors = ['#00FFFF', '#FFD700', '#00FF00', '#B34D4D', '#0000FF',
+                      '#D316C8', '#FF0000', '#065535', '#99FF99', '#999966']
 
-    node_layer_connections_dict = get_node_connections_on_layers(layers_dict, node)
+    flatten(multilayered_network, 'flattened_network', layers(multilayered_network))
 
-    # Init analysis dicts
-    for layer_key in node_layer_connections_dict.keys():
+    flattened_network = to_nx_dict(multilayered_network)['flattened_network']
 
-        temp_layer_data_dict = {
-            'Total number of connections': len(node_layer_connections_dict[layer_key]),
-            'Layer Centrality': nodes_layer_centrality_dict[node][layer_key],
-        }
+    color_map = []
 
-        for index in range(len(node_layer_connections_dict.keys())):
-            temp_layer_data_dict['Number of nodes of order {0}'.format(index + 1)] = 0
-            temp_layer_data_dict['Nodes of order {0}'.format(index + 1)] = []
+    for node in flattened_network:
+        color_map.append(cluster_colors[(nodes_cluster_label_dict[node])])
 
-        node_layer_centrality_analysis_dict[layer_key] = temp_layer_data_dict
+    # Construct plot legend
+    legend_circles = []
+    legend_labels = []
 
-    # Get all unique connected nodes
-    connected_nodes_set = set.union(*[a for a in node_layer_connections_dict.values()])
+    for cluster_class in set(nodes_cluster_label_dict.values()):
+        legend_circles.append(Line2D([0], [0], color='w', marker='o',
+                                     markerfacecolor=cluster_colors[cluster_class], markersize=12))
+        legend_labels.append('Cluster class {0}'.format(cluster_class))
 
-    # For each connected node, get the layers on which it is present
-    node_layers_dict = {}
+    # Set fig size 1920x1080 pixels
+    plt.figure(figsize=(16, 9), dpi=120)
+    plt.title(data_set_name.capitalize())
 
-    for connected_node in connected_nodes_set:
+    pos = nx_agraph.graphviz_layout(flattened_network, prog='neato')
 
-        temp_node_layer_dict = {
-            'layers': []
-        }
+    draw(flattened_network, node_color=color_map, pos=pos, with_labels=True)
 
-        for layer_key in node_layer_connections_dict:
-            if connected_node in node_layer_connections_dict[layer_key]:
-                temp_node_layer_dict['layers'].append(layer_key)
+    plt.legend(legend_circles, legend_labels)
 
-        node_layers_dict[connected_node] = temp_node_layer_dict
+    if save_to_disk:
+        project_root_path = dirname(dirname(__file__))
 
-    # Compute for each layer how many nodes of each order it contains
-    for node_key in node_layers_dict:
-        number_of_layers = len(node_layers_dict[node_key]['layers'])
+        plt.savefig("{0}/results/{1}/{2}/{1}_{2}_flattened_network_clusters".format(
+            project_root_path, data_set_name, centrality_measure))
 
-        for layer_name in node_layers_dict[node_key]['layers']:
-            node_layer_centrality_analysis_dict[layer_name][
-                'Number of nodes of order {0}'.format(number_of_layers)] += 1
-            node_layer_centrality_analysis_dict[layer_name][
-                'Nodes of order {0}'.format(number_of_layers)].append(node_key)
-
-    '''
-    # Compute unique node connections per layer
-    for layer_key in node_layer_connections_dict.keys():
-
-        temp_layer_connections_dict = node_layer_connections_dict.copy()
-        temp_layer_connections_dict.pop(layer_key)  # exclude current layer
-        temp_set = set.union(*[a for a in temp_layer_connections_dict.values()])
-
-        # print(len(set.union(node_layer_centrality_analysis_dict[layer_key], temp_set)))
-
-        temp_layer_data_dict = {
-            'Total number of connections': len(node_layer_connections_dict[layer_key]),
-            'Layer Centrality': nodes_layer_centrality_dict[node][layer_key],
-            'Number of unique node connections': len(node_layer_connections_dict[layer_key] - temp_set),
-            'Unique node connections': node_layer_connections_dict[layer_key] - temp_set
-        }
-
-        node_layer_centrality_analysis_dict[layer_key] = temp_layer_data_dict
-    '''
-
-    analysis_results_data_frame = DataFrame.from_dict(node_layer_centrality_analysis_dict).T.sort_index(axis=0)
-    analysis_results_data_frame.columns.name = "Node " + node
-
-    # print(results_data_frame)
-
-    return analysis_results_data_frame
+    plt.show()
 
 
 def plot_results_histograms(
@@ -200,7 +183,7 @@ def plot_results_histograms(
 
     for column_key in results_data_frame_dict.keys():
         if column_key in selected_columns:
-            plt.title("{0}".format(column_key))
+            plt.title("{0} dataset".format(column_key))
             plt.xlabel(x_axis_label)
             plt.ylabel(y_axis_label)
             plt.hist(list(results_data_frame_dict[column_key].values()),

@@ -101,7 +101,7 @@ def perform_kmeans(nodes_layer_centrality_data_frame, number_of_pcs=1, number_of
     # Plotting #
 
     # Plots the clusters for 2 or less principal components (2D)
-    if number_of_pcs <= 2 and show_plot:
+    if number_of_pcs == 2 and show_plot:
         plot_data = [["x", "y", "Cluster Class"]]
         for i in range(len(cluster_labels.labels_)):
             plot_data.append([
