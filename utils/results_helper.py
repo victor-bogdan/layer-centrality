@@ -151,6 +151,60 @@ def draw_flattened_network_clustering_results(
     plt.show()
 
 
+def draw_network_clustering_results(
+        data_set_name,
+        network_name,
+        network,
+        nodes_cluster_label_dict,
+        save_to_disk=False
+):
+    """
+    Plots the flattened network with each node colored according to its cluster class. Cluster classes
+    should be integers and start from 0.
+
+    :param data_set_name: Name of the data set.
+    :param network_name: Name of the network.
+    :param network: Networkx network class.
+    :param nodes_cluster_label_dict: Dictionary containing nodes and their cluster classes.
+    :param save_to_disk: Flag for enabling/disabling saving plots to disk.
+    """
+
+    cluster_colors = ['#00FFFF', '#FFD700', '#00FF00', '#B34D4D', '#0000FF',
+                      '#D316C8', '#FF0000', '#065535', '#99FF99', '#999966']
+
+    color_map = []
+
+    for node in network:
+        color_map.append(cluster_colors[(nodes_cluster_label_dict[node])])
+
+    # Construct plot legend
+    legend_circles = []
+    legend_labels = []
+
+    for cluster_class in set(nodes_cluster_label_dict.values()):
+        legend_circles.append(Line2D([0], [0], color='w', marker='o',
+                                     markerfacecolor=cluster_colors[cluster_class], markersize=12))
+        legend_labels.append('Cluster class {0}'.format(cluster_class))
+
+    # Set fig size 1920x1080 pixels
+    plt.figure(figsize=(16, 9), dpi=120)
+    plt.title("Network: {0}".format(network_name))
+
+    pos = nx_agraph.graphviz_layout(network, prog='neato')
+
+    draw(network, node_color=color_map, pos=pos, with_labels=True)
+
+    plt.legend(legend_circles, legend_labels)
+
+    if save_to_disk:
+        project_root_path = dirname(dirname(__file__))
+
+        plt.savefig("{0}/results/{1}/community_clustering/{1}_{2}_clusters".format(
+            project_root_path, data_set_name, network_name))
+
+    # plt.show()
+
+
 def plot_results_histograms(
         data_set_name,
         centrality_measure,
