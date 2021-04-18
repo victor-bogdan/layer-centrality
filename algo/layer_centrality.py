@@ -1,13 +1,14 @@
 from itertools import combinations, permutations
 from uunet.multinet import empty, add_nx_layer, flatten, layers, to_nx_dict, read, vertices
-from networkx import degree
+from utils.centrality_measure_helper import get_node_centrality_dict
 
 
-def create_layer_combinations_node_centrality_dict(nx_layer_dict):
+def create_layer_combinations_node_centrality_dict(nx_layer_dict, centrality_measure):
     """
     Creates a dictionary containing node centrality values for all layer combinations of all possible lengths.
 
     :param nx_layer_dict: Multilayer network layer dictionary.
+    :param centrality_measure: The centrality measure which is being used.
     :return: Dictionary containing node centrality values for all layer combinations of all possible lengths
     """
 
@@ -17,7 +18,7 @@ def create_layer_combinations_node_centrality_dict(nx_layer_dict):
     for i in range(len(nx_layer_dict)):
         layer_combination_tuple_list = list(combinations(nx_layer_dict.keys(), i + 1))
         compute_layer_combinations_node_centrality(
-            nx_layer_dict, layer_combination_tuple_list, layer_combinations_node_centrality_dict)
+            nx_layer_dict, layer_combination_tuple_list, layer_combinations_node_centrality_dict, centrality_measure)
 
     return layer_combinations_node_centrality_dict
 
@@ -25,7 +26,8 @@ def create_layer_combinations_node_centrality_dict(nx_layer_dict):
 def compute_layer_combinations_node_centrality(
         nx_layer_dict,
         layer_combination_tuple_list,
-        layer_combinations_node_centrality_dict
+        layer_combinations_node_centrality_dict,
+        centrality_measure
 ):
     """
     Computes the node centrality for each layer combination in :param layer_combination_tuple_list. Each tuple
@@ -35,22 +37,29 @@ def compute_layer_combinations_node_centrality(
     :param nx_layer_dict: Multilayer network layer dictionary.
     :param layer_combination_tuple_list: List of tuples containing layer combinations of same length.
     :param layer_combinations_node_centrality_dict: Dictionary reference
+    :param centrality_measure: The centrality measure which is being used.
     :return: void
     """
 
     for layer_combination_tuple in layer_combination_tuple_list:
         layer_combinations_node_centrality_dict[''.join(sorted(list(layer_combination_tuple)))] = \
-            compute_flattened_layer_combination_node_centrality(nx_layer_dict, layer_combination_tuple)
+            compute_flattened_layer_combination_node_centrality(
+                nx_layer_dict, layer_combination_tuple, centrality_measure)
         # print(''.join(sorted(list(layerTuple))), layerTupleDict[''.join(sorted(list(layerTuple)))])
 
 
-def compute_flattened_layer_combination_node_centrality(nx_layer_dict, layer_combination_tuple):
+def compute_flattened_layer_combination_node_centrality(
+        nx_layer_dict,
+        layer_combination_tuple,
+        centrality_measure
+):
     """
     Computes the centrality values for all nodes in a flattened network obtained from the combinations of
     layers.
 
     :param nx_layer_dict: Multilayer network layer dictionary.
     :param layer_combination_tuple: Tuple containing a combination of layers.
+    :param centrality_measure: The centrality measure which is being used.
     :return: Dictionary of centrality values for all nodes in the flattened network obtained from the
              combination of layers.
     """
@@ -66,28 +75,23 @@ def compute_flattened_layer_combination_node_centrality(nx_layer_dict, layer_com
     # print(nx.degree_centrality(flattened_layer))
     # print(nx.degree(flattened_layer), "\n")
 
-    # TODO for any given centrality measure function
-    degree_view = degree(flattened_layer)
-    flattened_layer_degree_dict = {}
-
-    for degree_tuple in degree_view:
-        flattened_layer_degree_dict[degree_tuple[0]] = degree_tuple[1]
-
-    return flattened_layer_degree_dict
+    return get_node_centrality_dict(centrality_measure, flattened_layer)
 
 
-def compute_multinet_layer_centrality(nx_layer_dict, nodes):
+def compute_multinet_layer_centrality(nx_layer_dict, nodes, centrality_measure):
     """
     Computes the layer centrality for each node in a given multilayer network.
 
     :param nx_layer_dict: Multilayer network layer dictionary.
     :param nodes: List containing all nodes for which the layer centrality is computed.
+    :param centrality_measure: The centrality measure which is being used.
     :return: Dictionary of dictionaries containing the centrality of each layer for each node in :param nodes.
     """
 
     nodes_layer_centrality_dict = {}
 
-    layer_combinations_tuple_dict = create_layer_combinations_node_centrality_dict(nx_layer_dict)
+    layer_combinations_tuple_dict = \
+        create_layer_combinations_node_centrality_dict(nx_layer_dict, centrality_measure)
 
     # Generate all possible layer permutations
     layer_permutations_tuple_list = list(permutations(nx_layer_dict.keys(), len(nx_layer_dict)))

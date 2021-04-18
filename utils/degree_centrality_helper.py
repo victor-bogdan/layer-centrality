@@ -8,12 +8,13 @@ def get_node_degree_centrality_analysis(
         node
 ):
     """
+    Creates a data frame with an analysis of the degree centrality for a specific :param node.
 
     :param layers_dict: Dictionary containing networkx layers
     :param nodes_layer_centrality_dict: Dictionary of dictionaries containing the centrality of
     each layer for a set of nodes.
     :param node: String representing a node.
-    :return:
+    :return: Data frame containing analysis of :param node.
     """
 
     node_layer_centrality_analysis_dict = {}

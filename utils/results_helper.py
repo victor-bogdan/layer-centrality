@@ -101,8 +101,8 @@ def draw_flattened_network_clustering_results(
         save_to_disk=False
 ):
     """
-    Plots the flattened network with each node colored according to its cluster class. Cluster classes
-    should be integers and start from 0.
+    Plots the flattened network, obtained from :param multilayered_network with each node colored
+    according to its cluster class. Cluster classes should be integers and start from 0.
 
     :param data_set_name: Name of the data set.
     :param centrality_measure: Name of the used centrality measure.

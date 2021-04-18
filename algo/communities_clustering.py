@@ -4,7 +4,7 @@ from networkx.algorithms.community import greedy_modularity_communities
 from utils.results_helper import draw_network_clustering_results
 
 
-def create_layer_combinations_node_communities_plots(
+def create_layer_combinations_node_communities(
         data_set_name,
         nx_layer_dict,
         save_to_disk=False
@@ -15,7 +15,8 @@ def create_layer_combinations_node_communities_plots(
     :param data_set_name: Name of the data set.
     :param nx_layer_dict: Multilayer network layer dictionary.
     :param save_to_disk: Flag for enabling/disabling saving plots to disk.
-    :return: void
+    :return: List of dictionaries containing nodes and their cluster labels for each network in
+    :param nx_layer_dict.
     """
 
     node_cluster_label_dict_list = []
