@@ -1,4 +1,5 @@
 from pandas import DataFrame
+from networkx import degree
 from utils.data_helper import get_node_connections_on_layers
 
 
@@ -85,7 +86,29 @@ def get_node_degree_centrality_analysis(
 
     analysis_results_data_frame = DataFrame.from_dict(node_layer_centrality_analysis_dict).T.sort_index(axis=0)
     analysis_results_data_frame.columns.name = "Node " + node
+    analysis_results_data_frame = analysis_results_data_frame.round(2)
 
     # print(results_data_frame)
 
     return analysis_results_data_frame
+
+
+def get_node_degree_centrality_dict(flattened_layer):
+    """
+    Returns a dictionary which contains the degree centrality measure for each node in :param flattened_layer,
+    obtained from a combination of layers.
+
+    :param flattened_layer: Networkx network which represents a flattened multilayered network, to which
+    the degree centrality measure is applied.
+    :return: Dictionary of degree centrality values for all nodes in the flattened network obtained from the
+    combination of layers.
+    """
+
+    flattened_layer_degree_dict = {}
+
+    degree_view = degree(flattened_layer)
+
+    for degree_tuple in degree_view:
+        flattened_layer_degree_dict[degree_tuple[0]] = degree_tuple[1]
+
+    return flattened_layer_degree_dict
