@@ -1,7 +1,8 @@
 from utils.degree_centrality_helper import get_node_degree_centrality_analysis, get_node_degree_centrality_dict
+from utils.katz_centrality_helper import get_node_katz_centrality_dict
 
 DEGREE_CENTRALITY = "degree_centrality"
-
+KATZ_CENTRALITY = "katz_centrality"
 
 def get_node_centrality_analysis(
         centrality_measure,
@@ -43,4 +44,5 @@ def get_node_centrality_dict(centrality_measure, flattened_layer):
 
     if centrality_measure == DEGREE_CENTRALITY:
         return get_node_degree_centrality_dict(flattened_layer)
-    
+    elif centrality_measure == KATZ_CENTRALITY:
+        return get_node_katz_centrality_dict(flattened_layer)
