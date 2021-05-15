@@ -1,34 +1,36 @@
 from utils.degree_centrality_helper import get_node_degree_centrality_analysis, get_node_degree_centrality_dict
 from utils.katz_centrality_helper import get_node_katz_centrality_dict
+from utils.eigenvector_centrality_helper import get_node_eigenvector_centrality_dict
 
 DEGREE_CENTRALITY = "degree_centrality"
 KATZ_CENTRALITY = "katz_centrality"
+EIGENVECTOR_CENTRALITY = "eigenvector_centrality"
+
 
 def get_node_centrality_analysis(
         centrality_measure,
         layers_dict,
         nodes_layer_centrality_dict,
-        node        
+        node
 ):
     """
     Creates a data frame with an analysis of the :param centrality for a specific :param node.
 
-    :param layers_dict: Dictionary containing networkx layers
+    :param centrality_measure: The centrality measure which is being used.
+    :param layers_dict: Dictionary containing networkx layers.
     :param nodes_layer_centrality_dict: Dictionary of dictionaries containing the centrality of
     each layer for a set of nodes.
     :param node: String representing a node.
     :return: Data frame containing analysis of :param node.
     """
-    
+
     if centrality_measure == DEGREE_CENTRALITY:
         return get_node_degree_centrality_analysis(
-            centrality_measure,
             layers_dict,
             nodes_layer_centrality_dict,
-            node  
+            node
         )
-    
-    
+
 
 def get_node_centrality_dict(centrality_measure, flattened_layer):
     """
@@ -44,5 +46,7 @@ def get_node_centrality_dict(centrality_measure, flattened_layer):
 
     if centrality_measure == DEGREE_CENTRALITY:
         return get_node_degree_centrality_dict(flattened_layer)
+    elif centrality_measure == EIGENVECTOR_CENTRALITY:
+        return get_node_eigenvector_centrality_dict(flattened_layer)
     elif centrality_measure == KATZ_CENTRALITY:
         return get_node_katz_centrality_dict(flattened_layer)

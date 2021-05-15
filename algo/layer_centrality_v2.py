@@ -90,16 +90,32 @@ def compute_multinet_layer_centrality(nx_layer_dict, nodes, centrality_measure):
 
     nodes_layer_centrality_dict = {}
 
-    layer_combinations_tuple_dict = \
-        create_layer_combinations_node_centrality_dict(nx_layer_dict, centrality_measure)
-
-    # Generate all possible layer permutations
-    layer_permutations_tuple_list = list(permutations(nx_layer_dict.keys(), len(nx_layer_dict)))
-
     for node in nodes:
-        nodes_layer_centrality_dict[node] = compute_multinet_layer_centrality_for_node(
-            nx_layer_dict, layer_combinations_tuple_dict, layer_permutations_tuple_list, node)
+
+        node_nx_layer_dict = {}
+
+        node_nx_absent_layer_list = []
+
+        for layer_name in nx_layer_dict.keys():
+            if nx_layer_dict[layer_name].has_node(node):
+                node_nx_layer_dict[layer_name] = nx_layer_dict[layer_name]
+            else:
+                node_nx_absent_layer_list.append(layer_name)
+
+        layer_combinations_tuple_dict = \
+            create_layer_combinations_node_centrality_dict(node_nx_layer_dict, centrality_measure)
+
+        # Generate all possible layer permutations
+        layer_permutations_tuple_list = list(permutations(node_nx_layer_dict.keys(), len(node_nx_layer_dict)))
+
+        temp_nodes_layer_centrality_dict = compute_multinet_layer_centrality_for_node(
+            node_nx_layer_dict, layer_combinations_tuple_dict, layer_permutations_tuple_list, node)
         #  print("Node {0}: Shapley = {1}".format(nodes, nodes_layer_centrality_dict))
+
+        for layer in node_nx_absent_layer_list:
+            temp_nodes_layer_centrality_dict[layer] = 0
+
+        nodes_layer_centrality_dict[node] = temp_nodes_layer_centrality_dict
 
     return nodes_layer_centrality_dict
 

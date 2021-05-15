@@ -1,7 +1,7 @@
 import uunet.multinet as ml
 import networkx as nx
 
-multilayeredNetwork = ml.read("../resources/test.txt")
+multilayeredNetwork = ml.read("../resources/test_network.txt")
 layers = ml.to_nx_dict(multilayeredNetwork)
 
 ml.plot(multilayeredNetwork, vertex_labels_bbox={"boxstyle": 'round4', "fc": 'white'})
