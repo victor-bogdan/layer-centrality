@@ -1,7 +1,7 @@
 from os.path import dirname
 from pandas import DataFrame, Series
 from uunet.multinet import read, vertices, to_nx_dict
-from algo.layer_centrality_v2 import compute_multinet_layer_centrality
+from algo.layer_centrality import compute_multinet_layer_centrality
 from algo.analysis import compute_shannon_entropy
 from utils.centrality_measure_helper import EIGENVECTOR_CENTRALITY
 

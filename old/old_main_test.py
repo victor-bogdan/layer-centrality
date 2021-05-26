@@ -17,32 +17,40 @@ l1l2l3 = ml.to_nx_dict(ml_l1l2l3)["flattened_l1l2l3"]
 print(nx.degree_centrality(l1l2l3))
 print(nx.degree(l1l2l3), "\n")
 
+ml.plot(ml_l1l2l3, vertex_labels_bbox={"boxstyle": 'round4', "fc": 'white'})
+
 ml_l1l2 = ml.empty()
 ml.add_nx_layer(ml_l1l2, layers["layer1"], "layer1")
 ml.add_nx_layer(ml_l1l2, layers["layer2"], "layer2")
 ml.flatten(ml_l1l2, "flattened_l1l2", layers=ml.layers(ml_l1l2))
 l1l2 = ml.to_nx_dict(ml_l1l2)["flattened_l1l2"]
 flattenedLayers.append(l1l2)
-print(nx.degree_centrality(l1l2))
+print("flattened_l1l2", nx.degree_centrality(l1l2))
 print(nx.degree(l1l2), "\n")
+
+ml.plot(ml_l1l2, vertex_labels_bbox={"boxstyle": 'round4', "fc": 'white'})
 
 ml_l1l3 = ml.empty()
 ml.add_nx_layer(ml_l1l3, layers["layer1"], "layer1")
-ml.add_nx_layer(ml_l1l3, layers["layer2"], "layer2")
+ml.add_nx_layer(ml_l1l3, layers["layer3"], "layer3")
 ml.flatten(ml_l1l3, "flattened_l1l3", layers=ml.layers(ml_l1l3))
 l1l3 = ml.to_nx_dict(ml_l1l3)["flattened_l1l3"]
 flattenedLayers.append(l1l3)
-print(nx.degree_centrality(l1l3))
+print("flattened_l1l3", nx.degree_centrality(l1l3))
 print(nx.degree(l1l3), "\n")
 
+ml.plot(ml_l1l3, vertex_labels_bbox={"boxstyle": 'round4', "fc": 'white'})
+
 ml_l2l3 = ml.empty()
-ml.add_nx_layer(ml_l2l3, layers["layer1"], "layer1")
 ml.add_nx_layer(ml_l2l3, layers["layer2"], "layer2")
+ml.add_nx_layer(ml_l2l3, layers["layer3"], "layer3")
 ml.flatten(ml_l2l3, "flattened_l2l3", layers=ml.layers(ml_l2l3))
 l2l3 = ml.to_nx_dict(ml_l2l3)["flattened_l2l3"]
 flattenedLayers.append(l2l3)
-print(nx.degree_centrality(l2l3))
+print("flattened_l2l3", nx.degree_centrality(l2l3))
 print(nx.degree(l2l3), "\n")
+
+ml.plot(ml_l2l3, vertex_labels_bbox={"boxstyle": 'round4', "fc": 'white'})
 
 l1 = layers["layer1"]
 flattenedLayers.append(l1)

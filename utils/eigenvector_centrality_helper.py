@@ -12,4 +12,4 @@ def get_node_eigenvector_centrality_dict(flattened_layer):
     combination of layers.
     """
 
-    return eigenvector_centrality(flattened_layer)
+    return eigenvector_centrality(flattened_layer, 10000)

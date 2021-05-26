@@ -38,6 +38,7 @@ results_data_frame['cluster_class'] = Series(nodes_cluster_label_dict, index=res
 results_data_frame.loc['mean'] = results_data_frame.mean()
 results_data_frame = results_data_frame.round(2)
 
+'''
 degree_centrality_analysis_data_frame_list = [
     get_node_degree_centrality_analysis(layers_dict, nodes_layer_centrality_dict, 'U18'),
     get_node_degree_centrality_analysis(layers_dict, nodes_layer_centrality_dict, 'U142'),
@@ -45,6 +46,7 @@ degree_centrality_analysis_data_frame_list = [
     get_node_degree_centrality_analysis(layers_dict, nodes_layer_centrality_dict, 'U23'),
     get_node_degree_centrality_analysis(layers_dict, nodes_layer_centrality_dict, 'U90'),
 ]
+'''
 
 '''
 draw_flattened_network_clustering_results(DATASET_NAME, CENTRALITY_MEASURE, data(DATASET_NAME),
@@ -58,12 +60,12 @@ plot_results_histograms(DATASET_NAME, CENTRALITY_MEASURE, results_data_frame,
 plot_results_histograms(DATASET_NAME, CENTRALITY_MEASURE, results_data_frame, 'shannon_entropy',
                         'Shannon Entropy Value', 'Number of Nodes', 3, 1, True)
 
-save_results_data_frame_as_xlsx(DATASET_NAME, CENTRALITY_MEASURE, results_data_frame,
-                                1, 1, len(results_data_frame)-1, 5)
-
 save_results_analysis_data_frames_as_xlsx(DATASET_NAME, CENTRALITY_MEASURE,
                                           degree_centrality_analysis_data_frame_list)
 '''
+
+save_results_data_frame_as_xlsx(DATASET_NAME, CENTRALITY_MEASURE, results_data_frame,
+                                1, 1, len(results_data_frame)-1, 5)
 
 # print(pd.DataFrame.from_dict(targetsShapleyValueDict).T)
 # targetsClusterDataFrame = computeClusters(targetsShapleyValueDict, 2, 3)

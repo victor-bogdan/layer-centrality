@@ -1,10 +1,12 @@
 from utils.degree_centrality_helper import get_node_degree_centrality_analysis, get_node_degree_centrality_dict
 from utils.katz_centrality_helper import get_node_katz_centrality_dict
 from utils.eigenvector_centrality_helper import get_node_eigenvector_centrality_dict
+from utils.game_theoretic_centrality_helper import get_node_game_theoretic_centrality_dict
 
 DEGREE_CENTRALITY = "degree_centrality"
-KATZ_CENTRALITY = "katz_centrality"
 EIGENVECTOR_CENTRALITY = "eigenvector_centrality"
+KATZ_CENTRALITY = "katz_centrality"
+GAME_THEORETIC_CENTRALITY = "game_theoretic_centrality"
 
 
 def get_node_centrality_analysis(
@@ -50,3 +52,5 @@ def get_node_centrality_dict(centrality_measure, flattened_layer):
         return get_node_eigenvector_centrality_dict(flattened_layer)
     elif centrality_measure == KATZ_CENTRALITY:
         return get_node_katz_centrality_dict(flattened_layer)
+    elif centrality_measure == GAME_THEORETIC_CENTRALITY:
+        return get_node_game_theoretic_centrality_dict(flattened_layer)

@@ -1,5 +1,5 @@
 from pandas import DataFrame
-from networkx import degree
+from networkx import degree_centrality
 from utils.data_helper import get_node_connections_on_layers
 
 
@@ -104,11 +104,4 @@ def get_node_degree_centrality_dict(flattened_layer):
     combination of layers.
     """
 
-    flattened_layer_degree_dict = {}
-
-    degree_view = degree(flattened_layer)
-
-    for degree_tuple in degree_view:
-        flattened_layer_degree_dict[degree_tuple[0]] = degree_tuple[1]
-
-    return flattened_layer_degree_dict
+    return degree_centrality(flattened_layer)
