@@ -13,8 +13,8 @@ multi_layered_network = read("{0}/resources/test_network.txt".format(project_roo
 nodeList = sorted(set(vertices(multi_layered_network)["actor"]))
 layers = to_nx_dict(multi_layered_network)
 nodes_layer_centrality_dict = compute_multinet_layer_centrality(layers, nodeList, CENTRALITY_MEASURE)
-# nodes_shannon_entropy_dict = compute_shannon_entropy(nodes_layer_centrality_dict)
+nodes_shannon_entropy_dict = compute_shannon_entropy(nodes_layer_centrality_dict)
 
 result_data_frame = DataFrame.from_dict(nodes_layer_centrality_dict).T
-# result_data_frame['Shannon Entropy'] = Series(nodes_shannon_entropy_dict, index=result_data_frame.index)
+result_data_frame['Shannon Entropy'] = Series(nodes_shannon_entropy_dict, index=result_data_frame.index)
 print(result_data_frame)

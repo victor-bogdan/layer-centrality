@@ -129,8 +129,15 @@ def compute_multinet_layer_centrality_for_node(
     for layer_permutation_tuple in layer_permutations_tuple_list:
         compute_shapley_for_tuple(layer_permutation_tuple, layer_combinations_tuple_dict, shapley_value_dict, node)
 
+    # Marginal Contribution: divide by number of total combinations
     for key in shapley_value_dict:
         shapley_value_dict[key] = shapley_value_dict[key] / len(layer_permutations_tuple_list)
+
+    # Transform to percentages
+    shapley_value_sum = sum(shapley_value_dict.values())
+
+    for key in shapley_value_dict:
+        shapley_value_dict[key] = shapley_value_dict[key] / shapley_value_sum * 100
 
     return shapley_value_dict
 
