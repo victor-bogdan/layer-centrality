@@ -4,28 +4,28 @@ from algo.layer_centrality import compute_multinet_layer_centrality
 from algo.analysis import compute_shannon_entropy
 from algo.kmeans_clustering import compute_clusters
 from algo.communities_clustering import create_layer_combinations_node_communities
-from utils.centrality_measure_helper import DEGREE_CENTRALITY, get_node_centrality_dict
 from utils.data_helper import draw_layers, get_node_connections_on_layers
 from utils.results_helper import plot_results_histograms, draw_results_layers, \
     save_results_analysis_data_frames_as_xlsx, save_results_data_frame_as_xlsx, \
     draw_flattened_network_clustering_results, draw_network_clustering_results
-from utils.degree_centrality_helper import get_node_degree_centrality_analysis
+from utils.DegreeCentralityHelper import DegreeCentralityHelper
 
 DATASET_NAME = "aucs"
-CENTRALITY_MEASURE = DEGREE_CENTRALITY
 
 multilayered_network = data(DATASET_NAME)
 node_list = sorted(set(vertices(multilayered_network)["actor"]))
-layers_dict = to_nx_dict(multilayered_network)
+nx_layer_dict = to_nx_dict(multilayered_network)
 
-nodes_layer_centrality_dict = compute_multinet_layer_centrality(layers_dict, node_list, CENTRALITY_MEASURE)
+centrality_helper = DegreeCentralityHelper(nx_layer_dict)
+
+nodes_layer_centrality_dict = compute_multinet_layer_centrality(nx_layer_dict, node_list, centrality_helper)
 nodes_shannon_entropy_dict = compute_shannon_entropy(nodes_layer_centrality_dict)
 nodes_cluster_label_dict = compute_clusters(nodes_layer_centrality_dict, 3, 3, False)
 
 '''
 create_layer_combinations_node_communities(
     DATASET_NAME,
-    layers_dict,
+    nx_layer_dict,
     True
 )
 '''
@@ -40,31 +40,32 @@ results_data_frame = results_data_frame.round(2)
 
 '''
 degree_centrality_analysis_data_frame_list = [
-    get_node_degree_centrality_analysis(layers_dict, nodes_layer_centrality_dict, 'U18'),
-    get_node_degree_centrality_analysis(layers_dict, nodes_layer_centrality_dict, 'U142'),
-    get_node_degree_centrality_analysis(layers_dict, nodes_layer_centrality_dict, 'U42'),
-    get_node_degree_centrality_analysis(layers_dict, nodes_layer_centrality_dict, 'U23'),
-    get_node_degree_centrality_analysis(layers_dict, nodes_layer_centrality_dict, 'U90'),
+    centralityHelper.get_node_degree_centrality_analysis(nx_layer_dict, nodes_layer_centrality_dict, 'U18'),
+    centralityHelper.get_node_degree_centrality_analysis(nx_layer_dict, nodes_layer_centrality_dict, 'U142'),
+    centralityHelper.get_node_degree_centrality_analysis(nx_layer_dict, nodes_layer_centrality_dict, 'U42'),
+    centralityHelper.get_node_degree_centrality_analysis(nx_layer_dict, nodes_layer_centrality_dict, 'U23'),
+    centralityHelper.get_node_degree_centrality_analysis(nx_layer_dict, nodes_layer_centrality_dict, 'U90'),
 ]
 '''
 
+
 '''
-draw_flattened_network_clustering_results(DATASET_NAME, CENTRALITY_MEASURE, data(DATASET_NAME),
+draw_flattened_network_clustering_results(DATASET_NAME, centrality_helper.centrality_measure_name, data(DATASET_NAME),
                                           nodes_cluster_label_dict, True)
 
-draw_results_layers(DATASET_NAME, CENTRALITY_MEASURE, multilayered_network, nodes_layer_centrality_dict, True)
+draw_results_layers(DATASET_NAME, centrality_helper.centrality_measure_name, multilayered_network, nodes_layer_centrality_dict, True)
 
-plot_results_histograms(DATASET_NAME, CENTRALITY_MEASURE, results_data_frame,
+plot_results_histograms(DATASET_NAME, centrality_helper.centrality_measure_name, results_data_frame,
                         vertices(multilayered_network)["layer"], 'Centrality Value', 'Number of Nodes',
                         20, 5, True)
-plot_results_histograms(DATASET_NAME, CENTRALITY_MEASURE, results_data_frame, 'shannon_entropy',
+plot_results_histograms(DATASET_NAME, centrality_helper.centrality_measure_name, results_data_frame, 'shannon_entropy',
                         'Shannon Entropy Value', 'Number of Nodes', 3, 1, True)
 
-save_results_analysis_data_frames_as_xlsx(DATASET_NAME, CENTRALITY_MEASURE,
+save_results_analysis_data_frames_as_xlsx(DATASET_NAME, centrality_helper.centrality_measure_name,
                                           degree_centrality_analysis_data_frame_list)
 '''
 
-save_results_data_frame_as_xlsx(DATASET_NAME, CENTRALITY_MEASURE, results_data_frame,
+save_results_data_frame_as_xlsx(DATASET_NAME, centrality_helper.centrality_measure_name, results_data_frame,
                                 1, 1, len(results_data_frame)-1, 5)
 
 # print(pd.DataFrame.from_dict(targetsShapleyValueDict).T)
