@@ -69,11 +69,11 @@ class KatzCentralityHelper(CentralityHelper):
 
         flattened_layer_katz_dict = {}
 
-        alpha = (1/self.min_overall_eigenvalue) / 2.0
+        alpha = 1 / self.min_overall_eigenvalue / 10.0
 
         print(alpha)
 
-        centrality = katz_centrality(flattened_layer, alpha, normalized=False, max_iter=100)
+        centrality = katz_centrality(flattened_layer, alpha, normalized=False)
 
         for n, c in sorted(centrality.items()):
             flattened_layer_katz_dict[n] = float(c)
