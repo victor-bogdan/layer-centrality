@@ -18,7 +18,7 @@ nx_layer_dict = to_nx_dict(multilayered_network)
 
 centrality_helper = EigenvectorCentralityHelper(nx_layer_dict)
 
-nodes_layer_centrality_dict = compute_multinet_layer_centrality(nx_layer_dict, node_list, centrality_helper.centrality_measure_name)
+nodes_layer_centrality_dict = compute_multinet_layer_centrality(nx_layer_dict, node_list, centrality_helper)
 nodes_shannon_entropy_dict = compute_shannon_entropy(nodes_layer_centrality_dict)
 
 results_data_frame = DataFrame.from_dict(nodes_layer_centrality_dict).T.sort_index(axis=1)
