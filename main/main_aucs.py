@@ -20,7 +20,7 @@ centrality_helper = DegreeCentralityHelper(nx_layer_dict)
 
 nodes_layer_centrality_dict = compute_multinet_layer_centrality(nx_layer_dict, node_list, centrality_helper)
 nodes_shannon_entropy_dict = compute_shannon_entropy(nodes_layer_centrality_dict)
-nodes_cluster_label_dict = compute_clusters(nodes_layer_centrality_dict, 3, 3, False)
+# nodes_cluster_label_dict = compute_clusters(nodes_layer_centrality_dict, 3, 3, False)
 
 '''
 create_layer_combinations_node_communities(
@@ -34,7 +34,7 @@ create_layer_combinations_node_communities(
 
 results_data_frame = DataFrame.from_dict(nodes_layer_centrality_dict).T.sort_index(axis=1)
 results_data_frame['shannon_entropy'] = Series(nodes_shannon_entropy_dict, index=results_data_frame.index)
-results_data_frame['cluster_class'] = Series(nodes_cluster_label_dict, index=results_data_frame.index)
+# results_data_frame['cluster_class'] = Series(nodes_cluster_label_dict, index=results_data_frame.index)
 results_data_frame.loc['mean'] = results_data_frame.mean()
 results_data_frame = results_data_frame.round(2)
 
