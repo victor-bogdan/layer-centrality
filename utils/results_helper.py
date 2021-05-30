@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib import rcParams
 from matplotlib.lines import Line2D
 from uunet.multinet import to_nx_dict, flatten, layers
 from networkx import draw, nx_agraph
@@ -6,8 +7,13 @@ from pandas import set_option, ExcelWriter
 from os.path import dirname
 
 # Module scope settings
+
+# Pandas settings
 set_option('display.width', 1000)
 set_option('max.columns', 20)
+
+# Matplotlib settings
+# rcParams.update({'font.size': 22})
 
 """
 Dictionary containing settings for each class of layer influence.
@@ -76,7 +82,7 @@ def draw_results_layers(
 
         # Set fig size 1920x1080 pixels
         plt.figure(figsize=(16, 9), dpi=120)
-        plt.title("Layer: {0}".format(layer_name))
+        plt.title("Layer: {0}".format(layer_name), fontdict={'size': 22})
 
         pos = nx_agraph.graphviz_layout(layer, prog='neato')
 

@@ -61,7 +61,8 @@ def compute_multinet_layer_centrality_for_node(
     shapley_value_sum = sum(shapley_value_dict.values())
 
     for key in shapley_value_dict:
-        shapley_value_dict[key] = shapley_value_dict[key] / shapley_value_sum * 100
+        if shapley_value_sum != 0:
+            shapley_value_dict[key] = shapley_value_dict[key] / shapley_value_sum * 100
 
     return shapley_value_dict
 
