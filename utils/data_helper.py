@@ -59,7 +59,7 @@ def draw_layers(
 
         # Set fig size 1920x1080 pixels
         plt.figure(figsize=(16, 9), dpi=120)
-        plt.title("Layer: {0}".format(layer_name))
+        plt.title("Layer: {0}".format(layer_name), fontdict={'size': 22})
         pos = nx_agraph.graphviz_layout(layer, prog='neato')
         draw(layer, pos=pos, with_labels=True)
         plt.draw()
