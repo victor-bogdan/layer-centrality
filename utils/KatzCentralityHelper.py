@@ -8,7 +8,7 @@ from utils.CentralityHelper import CentralityHelper
 
 class KatzCentralityHelper(CentralityHelper):
 
-    centrality_measure_function = "katz_centrality"
+    centrality_measure_name = "katz_centrality"
 
     min_overall_eigenvalue = 0.01
 

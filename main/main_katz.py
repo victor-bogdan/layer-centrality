@@ -26,5 +26,13 @@ results_data_frame['shannon_entropy'] = Series(nodes_shannon_entropy_dict, index
 results_data_frame.loc['mean'] = results_data_frame.mean()
 results_data_frame = results_data_frame.round(2)
 
-save_results_data_frame_as_xlsx(DATASET_NAME, centrality_helper.centrality_measure_function, results_data_frame,
-                                1, 1, len(results_data_frame)-1, 5)
+draw_results_layers(
+    DATASET_NAME,
+    centrality_helper.centrality_measure_name,
+    multilayered_network,
+    nodes_layer_centrality_dict,
+    True
+)
+
+save_results_data_frame_as_xlsx(DATASET_NAME, centrality_helper.centrality_measure_name, results_data_frame,
+                                1, 1, len(results_data_frame) - 1, 5)
