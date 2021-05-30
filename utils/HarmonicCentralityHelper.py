@@ -1,10 +1,10 @@
-from algo.game_theoretic_centrality import game_theoretic_centrality
+from networkx import harmonic_centrality
 from utils.CentralityHelper import CentralityHelper
 
 
-class GameTheoreticCentralityHelper(CentralityHelper):
+class HarmonicCentralityHelper(CentralityHelper):
 
-    centrality_measure_name = "game_theoretic_centrality"
+    centrality_measure_name = "harmonic_centrality"
 
     def __init__(self, nx_layer_dict):
         super().__init__(nx_layer_dict)
@@ -20,9 +20,4 @@ class GameTheoreticCentralityHelper(CentralityHelper):
         combination of layers.
         """
 
-        flattened_layer_degree_dict = {}
-
-        for node in flattened_layer.nodes:
-            flattened_layer_degree_dict[node] = game_theoretic_centrality(flattened_layer, node)
-
-        return flattened_layer_degree_dict
+        return harmonic_centrality(flattened_layer)
