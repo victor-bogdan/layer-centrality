@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from networkx import degree
 from uunet.multinet import vertices, to_nx_dict
 from networkx import draw, nx_agraph, neighbors
 from os.path import dirname
@@ -70,3 +71,67 @@ def draw_layers(
             plt.savefig("{0}/results/{1}/{1}_{2}_layer".format(project_root_path, data_set_name, layer_name))
 
         plt.show()
+
+
+def get_layer_total_number_of_nodes(multilayered_network):
+
+    layers = to_nx_dict(multilayered_network)
+
+    layer_number_of_nodes_dict = {}
+
+    for layer_name in layers.keys():
+        layer = layers[layer_name]
+
+        layer_number_of_nodes_dict[layer_name] = layer.number_of_nodes()
+
+    return layer_number_of_nodes_dict
+
+
+def get_layer_total_number_of_edges(multilayered_network):
+
+    layers = to_nx_dict(multilayered_network)
+
+    layer_number_of_nodes_dict = {}
+
+    for layer_name in layers.keys():
+        layer = layers[layer_name]
+
+        layer_number_of_nodes_dict[layer_name] = layer.number_of_edges()
+
+    return layer_number_of_nodes_dict
+
+
+def get_layer_most_connected_node(multilayered_network):
+
+    layers = to_nx_dict(multilayered_network)
+
+    layer_number_of_nodes_dict = {}
+
+    for layer_name in layers.keys():
+        layer = layers[layer_name]
+
+        layer_number_of_nodes_dict[layer_name] = max(degree(layer))
+
+    return layer_number_of_nodes_dict
+
+
+def get_layer_number_of_isolated_nodes(multilayered_network):
+
+    layers = to_nx_dict(multilayered_network)
+
+    layer_number_of_nodes_dict = {}
+
+    for layer_name in layers.keys():
+        layer = layers[layer_name]
+
+        number_of_isolated_nodes = 0
+
+        degree_view = degree(layer)
+
+        for degree_tuple in degree_view:
+            if degree_tuple[1] == 1:
+                number_of_isolated_nodes += 1
+
+        layer_number_of_nodes_dict[layer_name] = number_of_isolated_nodes
+
+    return layer_number_of_nodes_dict
