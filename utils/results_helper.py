@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-from matplotlib import rcParams
 from matplotlib.lines import Line2D
 from uunet.multinet import to_nx_dict, flatten, layers
 from networkx import draw, nx_agraph
@@ -11,9 +10,6 @@ from os.path import dirname
 # Pandas settings
 set_option('display.width', 1000)
 set_option('max.columns', 20)
-
-# Matplotlib settings
-# rcParams.update({'font.size': 22})
 
 """
 Dictionary containing settings for each class of layer influence.
@@ -353,3 +349,35 @@ def save_results_analysis_data_frames_as_xlsx(
         results_analysis_data_frame.to_excel(writer, results_analysis_data_frame.columns.name)
 
     writer.save()
+
+
+def get_max_layer_contribution(layer_name_list, results_data_frame):
+
+    max_layer_contribution_dict = {}
+
+    for layer_name in layer_name_list:
+        max_layer_contribution_dict[layer_name] = results_data_frame[layer_name].max()
+
+    return max_layer_contribution_dict
+
+
+def get_min_layer_contribution(layer_name_list, results_data_frame):
+
+    max_layer_contribution_dict = {}
+
+    for layer_name in layer_name_list:
+        max_layer_contribution_dict[layer_name] = results_data_frame[layer_name].min()
+
+    return max_layer_contribution_dict
+
+
+def get_number_of_layer_most_influenced_nodes(layer_name_list, results_data_frame):
+
+    layer_most_influenced_nodes_dict = {}
+
+    node_most_influential_layer_list = results_data_frame.idxmax(axis=1)
+
+    for layer_name in layer_name_list:
+        layer_most_influenced_nodes_dict[layer_name] = sum(node_most_influential_layer_list == layer_name)
+
+    return layer_most_influenced_nodes_dict
