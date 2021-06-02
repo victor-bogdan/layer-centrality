@@ -110,7 +110,7 @@ def get_layer_most_connected_node(multilayered_network):
     for layer_name in layers.keys():
         layer = layers[layer_name]
 
-        layer_number_of_nodes_dict[layer_name] = max(degree(layer))
+        layer_number_of_nodes_dict[layer_name] = max([val for (node, val) in degree(layer)])
 
     return layer_number_of_nodes_dict
 
