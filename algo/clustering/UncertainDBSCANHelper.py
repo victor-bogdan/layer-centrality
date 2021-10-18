@@ -1,17 +1,14 @@
 import matplotlib.pyplot as plt
 import numpy as np
-import pandas as pd
 from sklearn.cluster import DBSCAN
 from sklearn import neighbors
 from algo.functions import js_divergence
 
 
-class UDBSCANHelper:
-
-    _dataframe = pd.DataFrame()
+class UncertainDBSCANHelper:
 
     def __init__(self, dataframe):
-        _dataframe = dataframe
+        self._dataframe = dataframe.copy()
 
     def uncertain_knn(self, alpha):
         """
@@ -23,18 +20,20 @@ class UDBSCANHelper:
         :return: void
         """
 
+        dataframe = self._dataframe.copy()
+
         neighbours = neighbors.NearestNeighbors(n_neighbors=5, metric=js_divergence,
-                                                metric_params={"alpha": alpha}).fit(self._dataframe)
-        distances, indices = neighbours.kneighbors(self._dataframe)
+                                                metric_params={"alpha": alpha}).fit(dataframe)
+        distances, indices = neighbours.kneighbors(dataframe)
 
         print("shape of distances matrix: " + str(distances.shape) + "\n")
         for enum, row in enumerate(distances[:5]):
             print("observation " + str(enum) + ": " + str([round(x, 5) for x in row]))
 
-        self._dataframe['knn_farthest_dist'] = distances[:, -1]
-        self._dataframe.head()
+        dataframe['knn_farthest_dist'] = distances[:, -1]
+        dataframe.head()
 
-        self._dataframe.sort_values('knn_farthest_dist', ascending=False).reset_index()[['knn_farthest_dist']].plot()
+        dataframe.sort_values('knn_farthest_dist', ascending=False).reset_index()[['knn_farthest_dist']].plot()
         plt.xlabel("index")
         plt.ylabel("distance")
         plt.grid(True)
@@ -49,7 +48,7 @@ class UDBSCANHelper:
         as a core point.
         :param alpha: floating value used to avoid by 0 division in case q has probabilities with
         value 0.
-        :return: void
+        :return: Cluster labels in order.
         """
 
         db = DBSCAN(eps=eps, min_samples=min_samples, metric=js_divergence,
@@ -62,6 +61,7 @@ class UDBSCANHelper:
         n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
         n_noise_ = list(labels).count(-1)
 
-        print(labels)
         print('Estimated number of clusters: %d' % n_clusters_)
         print('Estimated number of noise points: %d' % n_noise_)
+
+        return labels
