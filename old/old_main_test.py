@@ -15,7 +15,8 @@ ml.add_nx_layer(ml_l1l2l3, layers["layer3"], "layer3")
 ml.flatten(ml_l1l2l3, "flattened_l1l2l3", layers=ml.layers(ml_l1l2l3))
 l1l2l3 = ml.to_nx_dict(ml_l1l2l3)["flattened_l1l2l3"]
 print(nx.degree_centrality(l1l2l3))
-print(nx.degree(l1l2l3), "\n")
+print(nx.degree(l1l2l3))
+print(nx.katz_centrality(l1l2l3), "\n")
 
 ml.plot(ml_l1l2l3, vertex_labels_bbox={"boxstyle": 'round4', "fc": 'white'})
 
