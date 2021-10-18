@@ -1,13 +1,8 @@
 from pandas import DataFrame, Series
 from uunet.multinet import data, vertices, to_nx_dict
-from algo.layer_centrality import compute_multinet_layer_centrality
-from algo.analysis import compute_shannon_entropy
-from algo.kmeans_clustering import compute_clusters
-from algo.communities_clustering import create_layer_combinations_node_communities
-from utils.results_helper import plot_results_histograms, draw_results_layers, \
-    save_results_analysis_data_frames_as_xlsx, save_results_data_frame_as_xlsx, \
-    draw_flattened_network_clustering_results, draw_network_clustering_results, \
-    get_number_of_layer_most_influenced_nodes, get_max_layer_contribution, \
+from algo.core.layer_centrality import compute_multinet_layer_centrality
+from algo.functions import compute_shannon_entropy
+from utils.results_helper import get_number_of_layer_most_influenced_nodes, get_max_layer_contribution, \
     get_min_layer_contribution
 from utils.KatzCentralityHelper import KatzCentralityHelper
 

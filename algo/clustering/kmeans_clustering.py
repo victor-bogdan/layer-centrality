@@ -6,7 +6,7 @@ from sklearn.cluster import KMeans
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from uunet.multinet import read, vertices, to_nx_dict
-from algo.layer_centrality import compute_multinet_layer_centrality
+from algo.core.layer_centrality import compute_multinet_layer_centrality
 
 
 def compute_clusters(nodes_layer_centrality_dict, number_of_pcs, number_of_clusters, show_plot=False):
@@ -160,7 +160,7 @@ def analyze_kmeans(nodes_layer_centrality_dict, number_of_pcs, max_number_of_clu
 
 
 if __name__ == "__main__":
-    multilayered_network = read("../resources/test_network.txt")
+    multilayered_network = read("../../resources/test_network.txt")
     node_list = sorted(set(vertices(multilayered_network)["actor"]))
     layers = to_nx_dict(multilayered_network)
     nodes_layer_centrality_dict_test = compute_multinet_layer_centrality(layers, node_list)
