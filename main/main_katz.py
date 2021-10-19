@@ -26,7 +26,7 @@ uncertain_dbscan_helper = UncertainDBSCANHelper(results_data_frame)
 # Analysis
 
 results_data_frame['shannon_entropy'] = Series(nodes_shannon_entropy_dict, index=results_data_frame.index)
-results_data_frame['cluster_class'] = uncertain_dbscan_helper.uncertain_dbscan(0.036, 5, 0.0001)
+results_data_frame['cluster_class'] = uncertain_dbscan_helper.uncertain_dbscan(0.028, 5, 0.0001)
 results_data_frame.loc['mean'] = results_data_frame.mean()
 results_data_frame = results_data_frame.round(2)
 
