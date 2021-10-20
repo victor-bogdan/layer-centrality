@@ -4,7 +4,7 @@ from algo.core.layer_centrality import compute_multinet_layer_centrality
 from algo.functions import compute_shannon_entropy
 from algo.clustering.UncertainDBSCANHelper import UncertainDBSCANHelper
 from utils.results_helper import get_number_of_layer_most_influenced_nodes, get_max_layer_contribution, \
-    get_min_layer_contribution, save_results_data_frame_as_xlsx
+    get_min_layer_contribution, get_layer_centrality_excel_models, save_layer_centrality_excel_models_as_xlsx
 from utils.SubgraphCentralityHelper import SubgraphCentralityHelper
 
 DATASET_NAME = "aucs"
@@ -18,15 +18,15 @@ centrality_helper = SubgraphCentralityHelper(nx_layer_dict)
 nodes_layer_centrality_dict = compute_multinet_layer_centrality(nx_layer_dict, node_list, centrality_helper)
 nodes_shannon_entropy_dict = compute_shannon_entropy(nodes_layer_centrality_dict)
 
-# Results DataFrame
-
-results_data_frame = DataFrame.from_dict(nodes_layer_centrality_dict).T.sort_index(axis=1)
-uncertain_dbscan_helper = UncertainDBSCANHelper(results_data_frame)
-
 # Analysis
 
+results_data_frame = DataFrame.from_dict(nodes_layer_centrality_dict).T.sort_index(axis=1)
+
+uncertain_dbscan_helper = UncertainDBSCANHelper(results_data_frame)
+cluster_labels = uncertain_dbscan_helper.uncertain_dbscan(0.036, 5, 0.0001)
+
 results_data_frame['shannon_entropy'] = Series(nodes_shannon_entropy_dict, index=results_data_frame.index)
-results_data_frame['cluster_class'] = uncertain_dbscan_helper.uncertain_dbscan(0.036, 5, 0.0001)
+results_data_frame['cluster_class'] = cluster_labels
 results_data_frame.loc['mean'] = results_data_frame.mean()
 results_data_frame = results_data_frame.round(2)
 
@@ -50,5 +50,9 @@ draw_results_layers(
 
 # Save
 
-save_results_data_frame_as_xlsx(DATASET_NAME, centrality_helper.centrality_measure_name, results_data_frame,
-                                1, 1, len(results_data_frame) - 1, 5)
+dataframe_excel_model_list = get_layer_centrality_excel_models(results_data_frame, set(cluster_labels))
+
+save_layer_centrality_excel_models_as_xlsx(
+    DATASET_NAME, centrality_helper.centrality_measure_name, dataframe_excel_model_list)
+
+print(results_data_frame)

@@ -4,6 +4,7 @@ from uunet.multinet import to_nx_dict, flatten, layers
 from networkx import draw, nx_agraph
 from pandas import set_option, ExcelWriter
 from os.path import dirname
+from utils.LayerCentralityExcelModel import LayerCentralityExcelModel
 
 # Module scope settings
 
@@ -272,25 +273,17 @@ def save_results_data_frame_as_csv(data_set_name, centrality_measure, results_da
     # print(results_data_frame)
 
 
-def save_results_data_frame_as_xlsx(
+def save_layer_centrality_excel_models_as_xlsx(
         data_set_name,
         centrality_measure,
-        results_data_frame,
-        start_row,
-        start_col,
-        end_row,
-        end_col
+        dataframe_excel_model_list
 ):
     """
     Creates a .xslx file containing all the results.
 
     :param data_set_name: Name of the data set.
     :param centrality_measure: Name of the used centrality measure.
-    :param results_data_frame: Dataframe containing all results.
-    :param start_row: Row index from where the formatting rules start
-    :param start_col: Column index from where the formatting rules start
-    :param end_row: Row index from where the formatting rules end
-    :param end_col: Column index from where the formatting rules end
+    :param dataframe_excel_model_list: List containing object of type LayerCentralityExcelModel.
     :return: void
     """
 
@@ -299,30 +292,30 @@ def save_results_data_frame_as_xlsx(
     writer = ExcelWriter('{0}/results/{1}/{2}/{1}_{2}_results.xlsx'.format(
         project_root_path, data_set_name, centrality_measure), engine='xlsxwriter')
 
-    results_data_frame.to_excel(writer, "LayerCentrality")
-
     workbook = writer.book
-    worksheet = writer.sheets['LayerCentrality']
 
-    for layer_influence_class in LAYER_INFLUENCE_CLASS_SETTINGS_DICT.keys():
-        temp_format = workbook.add_format(LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['xlsx_format'])
+    for dataframe_excel_model in dataframe_excel_model_list:
+        dataframe_excel_model.dataframe.to_excel(writer, dataframe_excel_model.sheet_title)
+        worksheet = writer.sheets[dataframe_excel_model.sheet_title]
 
-        worksheet.conditional_format(
-            start_row,
-            start_col,
-            end_row,
-            end_col,
-            {
-                'type': 'cell',
-                'criteria': '>=',
-                'value': LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['min_centrality_value'],
-                'format': temp_format
-            }
-        )
+        for layer_influence_class in LAYER_INFLUENCE_CLASS_SETTINGS_DICT.keys():
+            # TODO Only once!
+            temp_format = workbook.add_format(LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['xlsx_format'])
+
+            worksheet.conditional_format(
+                dataframe_excel_model.start_row,
+                dataframe_excel_model.start_col,
+                dataframe_excel_model.end_row,
+                dataframe_excel_model.end_col,
+                {
+                    'type': 'cell',
+                    'criteria': '>=',
+                    'value': LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['min_centrality_value'],
+                    'format': temp_format
+                }
+            )
 
     writer.save()
-
-    print(results_data_frame)
 
 
 def save_results_analysis_data_frames_as_xlsx(
@@ -351,8 +344,40 @@ def save_results_analysis_data_frames_as_xlsx(
     writer.save()
 
 
-def get_max_layer_contribution(layer_name_list, results_data_frame):
+def get_layer_centrality_excel_models(results_dataframe, cluster_labels=None):
+    """
+    Return a list containing object of type LayerCentralityExcelModel
 
+    :param results_dataframe: Results DataFrame.
+    :param cluster_labels: Cluster Labels.
+    :return: List of LayerCentralityExcelModel objects.
+    """
+
+    excel_model_list = []
+
+    results_dataframe_copy = results_dataframe.copy()
+
+    results_dataframe_excel_model = LayerCentralityExcelModel(
+        "Layer Centrality", results_dataframe_copy, 1, 1, len(results_dataframe_copy) - 1, 5)
+
+    excel_model_list.append(results_dataframe_excel_model)
+
+    if cluster_labels is None:
+        cluster_labels = []
+
+    for cluster_label in cluster_labels:
+        cluster_dataframe = results_dataframe_copy.loc[results_dataframe_copy['cluster_class'] == cluster_label].copy()
+        cluster_dataframe.loc['mean'] = cluster_dataframe.mean()
+
+        excel_model = LayerCentralityExcelModel('cluster_{0}'.format(cluster_label),
+                                                cluster_dataframe, 1, 1, len(cluster_dataframe) - 1, 5)
+
+        excel_model_list.append(excel_model)
+
+    return excel_model_list
+
+
+def get_max_layer_contribution(layer_name_list, results_data_frame):
     max_layer_contribution_dict = {}
 
     for layer_name in layer_name_list:
@@ -362,7 +387,6 @@ def get_max_layer_contribution(layer_name_list, results_data_frame):
 
 
 def get_min_layer_contribution(layer_name_list, results_data_frame):
-
     max_layer_contribution_dict = {}
 
     for layer_name in layer_name_list:
@@ -372,7 +396,6 @@ def get_min_layer_contribution(layer_name_list, results_data_frame):
 
 
 def get_number_of_layer_most_influenced_nodes(layer_name_list, results_data_frame):
-
     layer_most_influenced_nodes_dict = {}
 
     node_most_influential_layer_list = results_data_frame.idxmax(axis=1)
