@@ -3,7 +3,7 @@ from itertools import combinations
 from networkx import degree, harmonic_centrality, katz_centrality, adjacency_matrix, subgraph_centrality
 from numpy.linalg import eigvals
 from pandas import DataFrame
-from utils.data_helper import get_node_connections_on_layers
+from utils.data_helpers import get_node_connections_on_layers
 from uunet.multinet import empty, add_nx_layer, flatten, layers, to_nx_dict
 
 
