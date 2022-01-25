@@ -4,7 +4,6 @@ from uunet.multinet import to_nx_dict, flatten, layers
 from networkx import draw, nx_agraph
 from pandas import set_option, ExcelWriter
 from os.path import dirname
-from utils.LayerCentralityExcelModel import LayerCentralityExcelModel
 
 # Module scope settings
 
@@ -21,6 +20,26 @@ LAYER_INFLUENCE_CLASS_SETTINGS_DICT = {
     3: {'min_centrality_value': 30, 'node_color': '#F7F304', 'xlsx_format': {'bg_color': '#F7F304'}},
     4: {'min_centrality_value': 0, 'node_color': '#2CC82E', 'xlsx_format': {'bg_color': '#2CC82E'}}
 }
+
+
+class LayerCentralityExcelModel:
+
+    def __init__(
+        self,
+        sheet_title,
+        dataframe,
+        start_row,
+        start_col,
+        end_row,
+        end_col
+    ):
+
+        self.sheet_title = sheet_title
+        self.dataframe = dataframe.copy()
+        self.start_row = start_row
+        self.start_col = start_col
+        self.end_row = end_row
+        self.end_col = end_col
 
 
 def get_layer_influence_class(layer_centrality):

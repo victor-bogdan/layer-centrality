@@ -5,7 +5,7 @@ from algo.functions import compute_shannon_entropy
 from algo.clustering.UncertainDBSCANHelper import UncertainDBSCANHelper
 from utils.results_helper import get_number_of_layer_most_influenced_nodes, get_max_layer_contribution, \
     get_min_layer_contribution, get_layer_centrality_excel_models, save_layer_centrality_excel_models_as_xlsx
-from utils.DegreeCentralityHelper import DegreeCentralityHelper
+from utils.centrality_helpers import DegreeCentralityHelper
 
 DATASET_NAME = "aucs"
 

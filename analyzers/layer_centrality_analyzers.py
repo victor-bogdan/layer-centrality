@@ -1,10 +1,8 @@
 from pandas import DataFrame
 from uunet.multinet import data, vertices, to_nx_dict
 from algo.core.layer_centrality import compute_multinet_layer_centrality
-from utils.DegreeCentralityHelper import DegreeCentralityHelper
-from utils.HarmonicCentralityHelper import HarmonicCentralityHelper
-from utils.KatzCentralityHelper import KatzCentralityHelper
-from utils.SubgraphCentralityHelper import SubgraphCentralityHelper
+from utils.centrality_helpers import DegreeCentralityHelper, HarmonicCentralityHelper, \
+    KatzCentralityHelper, SubgraphCentralityHelper
 
 
 class DegreeCentralityAnalyzer:
