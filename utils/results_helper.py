@@ -10,7 +10,7 @@ from utils.LayerCentralityExcelModel import LayerCentralityExcelModel
 
 # Pandas settings
 set_option('display.width', 1000)
-set_option('max.columns', 20)
+set_option('display.max_columns', 20)
 
 """
 Dictionary containing settings for each class of layer influence.
