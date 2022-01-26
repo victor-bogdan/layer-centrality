@@ -160,7 +160,7 @@ def analyze_kmeans(nodes_layer_centrality_dict, number_of_pcs, max_number_of_clu
 
 
 if __name__ == "__main__":
-    multilayered_network = read("../../resources/test_network.txt")
+    multilayered_network = read("../../internal/resources/test_network.txt")
     node_list = sorted(set(vertices(multilayered_network)["actor"]))
     layers = to_nx_dict(multilayered_network)
     nodes_layer_centrality_dict_test = compute_multinet_layer_centrality(layers, node_list)

@@ -4,7 +4,6 @@ from uunet.multinet import to_nx_dict, flatten, layers
 from networkx import draw, nx_agraph
 from pandas import set_option, ExcelWriter
 from os.path import dirname
-from utils.LayerCentralityExcelModel import LayerCentralityExcelModel
 
 # Module scope settings
 
@@ -23,6 +22,26 @@ LAYER_INFLUENCE_CLASS_SETTINGS_DICT = {
 }
 
 
+class LayerCentralityExcelModel:
+
+    def __init__(
+        self,
+        sheet_title,
+        dataframe,
+        start_row,
+        start_col,
+        end_row,
+        end_col
+    ):
+
+        self.sheet_title = sheet_title
+        self.dataframe = dataframe.copy()
+        self.start_row = start_row
+        self.start_col = start_col
+        self.end_row = end_row
+        self.end_col = end_col
+
+
 def get_layer_influence_class(layer_centrality):
     """
     Returns the layer influence class based on the given :param layer_centrality.
@@ -36,12 +55,25 @@ def get_layer_influence_class(layer_centrality):
             return layer_influence_class
 
 
+def get_layer_influence_class_node_color(layer_centrality):
+    """
+    Returns the layer influence class node color based on the given :param layer_centrality.
+
+    :param layer_centrality: Layer centrality for a node in a multilayered network.
+    :return: Integer representing layer influence class.
+    """
+
+    for layer_influence_class in LAYER_INFLUENCE_CLASS_SETTINGS_DICT.keys():
+        if layer_centrality >= LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['min_centrality_value']:
+            return LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['node_color']
+
+
 def draw_results_layers(
         data_set_name,
         centrality_measure,
         multilayered_network,
         nodes_layer_centrality_dict,
-        save_to_disk=False
+        save_to_path=""
 ):
     """
     Plots all layers in the given multilayered network and applies the settings for each node based on
@@ -52,7 +84,7 @@ def draw_results_layers(
     :param multilayered_network: Multilayered network.
     :param nodes_layer_centrality_dict: Dictionary of dictionaries containing the centrality of
     each layer for a set of nodes.
-    :param save_to_disk: Flag for enabling/disabling saving plots to disk.
+    :param save_to_path: Disk path for saving the plots.
     :return: void
     """
 
@@ -87,11 +119,9 @@ def draw_results_layers(
 
         plt.legend(legend_circles, legend_labels)
 
-        if save_to_disk:
-            project_root_path = dirname(dirname(__file__))
-
-            plt.savefig("{0}/results/{1}/{2}/{1}_{2}_{3}_layer".format(
-                project_root_path, data_set_name, centrality_measure, layer_name))
+        if save_to_path != "":
+            plt.savefig("{0}/{1}/{2}/{1}_{2}_{3}_layer".format(
+                save_to_path, data_set_name, centrality_measure, layer_name))
 
         plt.show()
 
@@ -101,7 +131,7 @@ def draw_flattened_network_clustering_results(
         centrality_measure,
         multilayered_network,
         nodes_cluster_label_dict,
-        save_to_disk=False
+        save_to_path=""
 ):
     """
     Plots the flattened network, obtained from :param multilayered_network with each node colored
@@ -111,7 +141,7 @@ def draw_flattened_network_clustering_results(
     :param centrality_measure: Name of the used centrality measure.
     :param multilayered_network: Multilayered network.
     :param nodes_cluster_label_dict: Dictionary containing nodes and their cluster classes.
-    :param save_to_disk: Flag for enabling/disabling saving plots to disk.
+    :param save_to_path: Disk path for saving the plots.
     """
 
     cluster_colors = ['#00FFFF', '#FFD700', '#00FF00', '#B34D4D', '#0000FF',
@@ -145,11 +175,9 @@ def draw_flattened_network_clustering_results(
 
     plt.legend(legend_circles, legend_labels)
 
-    if save_to_disk:
-        project_root_path = dirname(dirname(__file__))
-
-        plt.savefig("{0}/results/{1}/{2}/{1}_{2}_flattened_network_clusters".format(
-            project_root_path, data_set_name, centrality_measure))
+    if save_to_path != "":
+        plt.savefig("{0}/{1}/{2}/{1}_{2}_flattened_network_clusters".format(
+            save_to_path, data_set_name, centrality_measure))
 
     plt.show()
 
@@ -159,7 +187,7 @@ def draw_network_clustering_results(
         network_name,
         network,
         nodes_cluster_label_dict,
-        save_to_disk=False
+        save_to_path=""
 ):
     """
     Plots the flattened network with each node colored according to its cluster class. Cluster classes
@@ -169,7 +197,7 @@ def draw_network_clustering_results(
     :param network_name: Name of the network.
     :param network: Networkx network class.
     :param nodes_cluster_label_dict: Dictionary containing nodes and their cluster classes.
-    :param save_to_disk: Flag for enabling/disabling saving plots to disk.
+    :param save_to_path: Disk path for saving the plots.
     """
 
     cluster_colors = ['#00FFFF', '#FFD700', '#00FF00', '#B34D4D', '#0000FF',
@@ -199,11 +227,9 @@ def draw_network_clustering_results(
 
     plt.legend(legend_circles, legend_labels)
 
-    if save_to_disk:
-        project_root_path = dirname(dirname(__file__))
-
-        plt.savefig("{0}/results/{1}/community_clustering/{1}_{2}_clusters".format(
-            project_root_path, data_set_name, network_name))
+    if save_to_path != "":
+        plt.savefig("{0}/{1}/community_clustering/{1}_{2}_clusters".format(
+            save_to_path, data_set_name, network_name))
 
     # plt.show()
 
@@ -217,7 +243,7 @@ def plot_results_histograms(
         y_axis_label,
         number_of_bins,
         step_size,
-        save_to_disk=False
+        save_to_path=""
 ):
     """
     Plots the histograms for the selected columns.
@@ -230,7 +256,7 @@ def plot_results_histograms(
     :param y_axis_label: String for the y axis histogram label
     :param number_of_bins: Number of bins for the histogram.
     :param step_size: Step size for creating the bins.
-    :param save_to_disk: Flag for enabling/disabling saving plots to disk.
+    :param save_to_path: Disk path for saving the plots.
     :return: void
     """
 
@@ -246,11 +272,9 @@ def plot_results_histograms(
             plt.hist(list(results_data_frame_dict[column_key].values()),
                      bins, histtype='bar', edgecolor='black')
 
-            if save_to_disk:
-                project_root_path = dirname(dirname(__file__))
-
-                plt.savefig("{0}/results/{1}/{2}/{1}_{2}_{3}_histogram".format(
-                    project_root_path, data_set_name, centrality_measure, column_key))
+            if save_to_path != "":
+                plt.savefig("{0}/{1}/{2}/{1}_{2}_{3}_histogram".format(
+                    save_to_path, data_set_name, centrality_measure, column_key))
 
             plt.show()
 
@@ -267,7 +291,7 @@ def save_results_data_frame_as_csv(data_set_name, centrality_measure, results_da
 
     project_root_path = dirname(dirname(__file__))
 
-    results_data_frame.to_csv('{0}/results/{1}/{2}/{1}_{2}_results.csv'.format(
+    results_data_frame.to_csv('{0}/internal/results/{1}/{2}/{1}_{2}_results.csv'.format(
         project_root_path, data_set_name, centrality_measure), encoding='utf-16')
 
     # print(results_data_frame)
@@ -289,7 +313,7 @@ def save_layer_centrality_excel_models_as_xlsx(
 
     project_root_path = dirname(dirname(__file__))
 
-    writer = ExcelWriter('{0}/results/{1}/{2}/{1}_{2}_results.xlsx'.format(
+    writer = ExcelWriter('{0}/internal/results/{1}/{2}/{1}_{2}_results.xlsx'.format(
         project_root_path, data_set_name, centrality_measure), engine='xlsxwriter')
 
     workbook = writer.book
@@ -335,7 +359,7 @@ def save_results_analysis_data_frames_as_xlsx(
 
     project_root_path = dirname(dirname(__file__))
 
-    writer = ExcelWriter('{0}/results/{1}/{2}/{1}_{2}_results_analysis.xlsx'.format(
+    writer = ExcelWriter('{0}/internal/results/{1}/{2}/{1}_{2}_results_analysis.xlsx'.format(
         project_root_path, data_set_name, centrality_measure), engine='xlsxwriter')
 
     for results_analysis_data_frame in results_analysis_data_frame_list:

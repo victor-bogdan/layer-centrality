@@ -3,7 +3,7 @@ from pandas import DataFrame, Series
 from uunet.multinet import read, vertices, to_nx_dict
 from algo.core.layer_centrality import compute_multinet_layer_centrality
 from algo.functions import compute_shannon_entropy
-from utils.DegreeCentralityHelper import DegreeCentralityHelper
+from utils.centrality_helpers import SubgraphCentralityHelper
 
 project_root_path = dirname(dirname(__file__))
 
@@ -11,7 +11,7 @@ multi_layered_network = read("{0}/resources/test_network.txt".format(project_roo
 nodeList = sorted(set(vertices(multi_layered_network)["actor"]))
 nx_layer_dict = to_nx_dict(multi_layered_network)
 
-centrality_helper = DegreeCentralityHelper(nx_layer_dict)
+centrality_helper = SubgraphCentralityHelper(nx_layer_dict)
 
 nodes_layer_centrality_dict = compute_multinet_layer_centrality(nx_layer_dict, nodeList, centrality_helper)
 nodes_shannon_entropy_dict = compute_shannon_entropy(nodes_layer_centrality_dict)
