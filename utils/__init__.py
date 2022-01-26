@@ -1,2 +1,2 @@
-from centrality_measure import CentralityMeasure
-from dataset_helpers import AUCSDatasetHelper
+from utils.centrality_measure import CentralityMeasure
+from utils.dataset_helpers import AUCSDatasetHelper

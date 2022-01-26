@@ -1,1 +1,1 @@
-from layer_centrality_analyzers import AUCSCentralityAnalyzer
+from analyzers.layer_centrality_analyzers import AUCSCentralityAnalyzer

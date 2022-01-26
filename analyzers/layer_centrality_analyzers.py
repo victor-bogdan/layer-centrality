@@ -1,6 +1,6 @@
 from pandas import DataFrame
 from algo.core.layer_centrality import compute_multinet_layer_centrality
-from utils import AUCSDatasetHelper
+from utils.dataset_helpers import AUCSDatasetHelper
 from utils.centrality_helpers import DegreeCentralityHelper, HarmonicCentralityHelper, \
     KatzCentralityHelper, SubgraphCentralityHelper
 from utils.centrality_measure import CentralityMeasure
