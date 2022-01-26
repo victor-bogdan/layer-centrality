@@ -15,6 +15,16 @@ class AUCSCentralityAnalyzer:
         self.__nodes_layer_centrality_dict = {}
         self.__results_data_frame = DataFrame.from_dict(self.__nodes_layer_centrality_dict)
 
+    def get_node_list(self):
+        return self.__node_list
+
+    def get_node_edges_for_layer(self, layer_name):
+        node_edges = []
+        layer_graph = self.__nx_layer_dict[layer_name]
+        for node in self.__node_list:
+            node_edges = node_edges + list(layer_graph.edges(node))
+        return node_edges
+
     def get_layer_centrality(self, centrality_measure):
 
         if centrality_measure == CentralityMeasure.Degree:
