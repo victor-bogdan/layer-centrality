@@ -44,7 +44,7 @@ draw_results_layers(
     centrality_helper.centrality_measure_name,
     multilayered_network,
     nodes_layer_centrality_dict,
-    "{0}/internal/results".format(dirname(dirname(__file__)))
+    "{0}/layer_centrality/internal/results".format(dirname(dirname(__file__)))
 )
 '''
 

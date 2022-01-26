@@ -6,7 +6,7 @@ DATASET_NAME = "aucs"
 
 multilayered_network = data(DATASET_NAME)
 
-# draw_layers("aucs", multilayered_network, "{0}/internal/results".format(dirname(dirname(__file__))))
+# draw_layers("aucs", multilayered_network, "{0}/layer_centrality/internal/results".format(dirname(dirname(__file__))))
 print(get_layer_total_number_of_nodes(multilayered_network))
 print(get_layer_total_number_of_edges(multilayered_network))
 print(get_layer_most_connected_node(multilayered_network))
