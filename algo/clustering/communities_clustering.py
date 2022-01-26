@@ -1,22 +1,21 @@
 from itertools import combinations
 from uunet.multinet import empty, add_nx_layer, flatten, layers, to_nx_dict
 from networkx.algorithms.community import greedy_modularity_communities
-from utils.results_helper import draw_network_clustering_results
+from utils.result_helpers import draw_network_clustering_results
 
 
 def create_layer_combinations_node_communities(
         data_set_name,
         nx_layer_dict,
-        save_to_disk=False
+        save_to_path=""
 ):
     """
     Creates plots containing node communities for all layer combinations of all possible lengths.
 
     :param data_set_name: Name of the data set.
     :param nx_layer_dict: Multilayer network layer dictionary.
-    :param save_to_disk: Flag for enabling/disabling saving plots to disk.
+    :param save_to_path: Disk path for saving the plots.
     :return: List of dictionaries containing nodes and their cluster labels for each network in
-    :param nx_layer_dict.
     """
 
     node_cluster_label_dict_list = []
@@ -25,7 +24,7 @@ def create_layer_combinations_node_communities(
     for i in range(len(nx_layer_dict)):
         layer_combination_tuple_list = list(combinations(nx_layer_dict.keys(), i + 1))
         compute_layer_combinations_node_communities(data_set_name, nx_layer_dict,
-            layer_combination_tuple_list, node_cluster_label_dict_list, save_to_disk)
+            layer_combination_tuple_list, node_cluster_label_dict_list, save_to_path)
 
     return node_cluster_label_dict_list
 
@@ -35,7 +34,7 @@ def compute_layer_combinations_node_communities(
         nx_layer_dict,
         layer_combination_tuple_list,
         node_cluster_label_dict_list,
-        save_to_disk=False
+        save_to_path
 ):
     """
     Computes the node communities for each layer combination in :param layer_combination_tuple_list. Each tuple
@@ -45,13 +44,13 @@ def compute_layer_combinations_node_communities(
     :param nx_layer_dict: Multilayer network layer dictionary.
     :param layer_combination_tuple_list: List of tuples containing layer combinations of same length.
     :param node_cluster_label_dict_list: List of dictionaries containing node clusters.
-    :param save_to_disk: Flag for enabling/disabling saving plots to disk.
+    :param save_to_path: Disk path for saving the plots.
     :return: void
     """
 
     for layer_combination_tuple in layer_combination_tuple_list:
         compute_flattened_layer_combination_node_community(data_set_name,
-            nx_layer_dict, layer_combination_tuple, node_cluster_label_dict_list, save_to_disk)
+            nx_layer_dict, layer_combination_tuple, node_cluster_label_dict_list, save_to_path)
         # print(''.join(sorted(list(layerTuple))), layerTupleDict[''.join(sorted(list(layerTuple)))])
 
 
@@ -60,7 +59,7 @@ def compute_flattened_layer_combination_node_community(
         nx_layer_dict,
         layer_combination_tuple,
         node_cluster_label_dict_list,
-        save_to_disk=False
+        save_to_path
 ):
     """
     Computes the node community in a flattened network obtained from the combinations of layers.
@@ -69,7 +68,7 @@ def compute_flattened_layer_combination_node_community(
     :param nx_layer_dict: Multilayer network layer dictionary.
     :param layer_combination_tuple: Tuple containing a combination of layers.
     :param node_cluster_label_dict_list: List of dictionaries containing node clusters.
-    :param save_to_disk: Flag for enabling/disabling saving plots to disk.
+    :param save_to_path: Disk path for saving the plots.
     :return: void
     """
 
@@ -101,7 +100,7 @@ def compute_flattened_layer_combination_node_community(
         flattened_layer_name,
         flattened_layer,
         node_cluster_label_dict,
-        save_to_disk
+        save_to_path
     )
 
     layer_node_cluster_label_dict = {flattened_layer_name: node_cluster_label_dict}
