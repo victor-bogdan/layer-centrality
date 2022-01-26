@@ -1,19 +1,12 @@
-from enum import Enum
 from pandas import DataFrame
 from uunet.multinet import data, vertices, to_nx_dict
 from algo.core.layer_centrality import compute_multinet_layer_centrality
 from utils.centrality_helpers import DegreeCentralityHelper, HarmonicCentralityHelper, \
     KatzCentralityHelper, SubgraphCentralityHelper
+from utils.centrality_measure import CentralityMeasure
 
 
-class CentralityMeasure(Enum):
-    Degree = 1,
-    Harmonic = 2,
-    Katz = 3,
-    Subgraph = 4
-
-
-class CentralityAnalyzer:
+class AUCSCentralityAnalyzer:
 
     def __init__(self):
         self.nodes_layer_centrality_dict = {}

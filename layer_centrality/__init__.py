@@ -1,1 +1,2 @@
-from analyzers.layer_centrality_analyzer import CentralityMeasure, CentralityAnalyzer
+from analyzers.layer_centrality_analyzers import AUCSCentralityAnalyzer
+from utils.centrality_measure import CentralityMeasure

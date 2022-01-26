@@ -42,14 +42,14 @@ def print_node_layers(node, multilayered_network):
 def draw_layers(
         data_set_name,
         multilayered_network,
-        save_to_disk=False
+        save_to_path=""
 ):
     """
     Plots all layers in the given multilayered network.
 
     :param data_set_name: Name of the data set.
     :param multilayered_network: Multilayered network.
-    :param save_to_disk: Flag for enabling/disabling saving plots to disk.
+    :param save_to_path: Disk path for saving the plots.
     :return: void
     """
 
@@ -65,10 +65,8 @@ def draw_layers(
         draw(layer, pos=pos, with_labels=True)
         plt.draw()
 
-        if save_to_disk:
-            project_root_path = dirname(dirname(__file__))
-
-            plt.savefig("{0}/results/{1}/{1}_{2}_layer".format(project_root_path, data_set_name, layer_name))
+        if save_to_path != "":
+            plt.savefig("{0}/{1}/{1}_{2}_layer".format(save_to_path, data_set_name, layer_name))
 
         plt.show()
 
