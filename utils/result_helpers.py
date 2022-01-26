@@ -55,6 +55,19 @@ def get_layer_influence_class(layer_centrality):
             return layer_influence_class
 
 
+def get_layer_influence_class_node_color(layer_centrality):
+    """
+    Returns the layer influence class node color based on the given :param layer_centrality.
+
+    :param layer_centrality: Layer centrality for a node in a multilayered network.
+    :return: Integer representing layer influence class.
+    """
+
+    for layer_influence_class in LAYER_INFLUENCE_CLASS_SETTINGS_DICT.keys():
+        if layer_centrality >= LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['min_centrality_value']:
+            return LAYER_INFLUENCE_CLASS_SETTINGS_DICT[layer_influence_class]['node_color']
+
+
 def draw_results_layers(
         data_set_name,
         centrality_measure,

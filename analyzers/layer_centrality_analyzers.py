@@ -4,6 +4,7 @@ from algo.core.layer_centrality import compute_multinet_layer_centrality
 from utils.centrality_helpers import DegreeCentralityHelper, HarmonicCentralityHelper, \
     KatzCentralityHelper, SubgraphCentralityHelper
 from utils.centrality_measure import CentralityMeasure
+from utils.result_helpers import get_layer_influence_class_node_color
 
 
 class AUCSCentralityAnalyzer:
@@ -46,3 +47,6 @@ class AUCSCentralityAnalyzer:
         self.__results_data_frame = self.__results_data_frame.round(2)
 
         return self.__results_data_frame
+
+    def get_node_color(self, layer_centrality):
+        return get_layer_influence_class_node_color(layer_centrality)
