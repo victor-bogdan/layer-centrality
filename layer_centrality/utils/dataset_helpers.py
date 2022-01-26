@@ -1,10 +1,11 @@
 from uunet.multinet import data, vertices, to_nx_dict
 
 
-class AUCSDatasetHelper:
+class DatasetHelper:
 
-    def __init__(self):
-        self.__multilayered_network = data("aucs")
+    # TODO consider other sources for multilayered networks than the uunet library
+    def __init__(self, dataset_name):
+        self.__multilayered_network = data(dataset_name)
         self.__node_list = sorted(set(vertices(self.__multilayered_network)["actor"]))
         self.__nx_layer_dict = to_nx_dict(self.__multilayered_network)
 
