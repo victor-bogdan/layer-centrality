@@ -98,7 +98,7 @@ def compute_shapley_for_tuple(layer_permutation_tuple, layer_combinations_tuple_
 
 
 if __name__ == "__main__":
-    multilayeredNetwork = read("../../resources/test_network.txt")
+    multilayeredNetwork = read("../../internal/resources/test_network.txt")
     nodeList = sorted(set(vertices(multilayeredNetwork)["actor"]))
     layers = to_nx_dict(multilayeredNetwork)
     print(compute_multinet_layer_centrality(layers, nodeList))
