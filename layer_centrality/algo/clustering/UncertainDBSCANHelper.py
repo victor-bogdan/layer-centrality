@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.cluster import DBSCAN
 from sklearn import neighbors
-from algo.functions import js_divergence
+from layer_centrality.algo.functions import js_divergence
 
 
 class UncertainDBSCANHelper:

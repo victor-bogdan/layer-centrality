@@ -1,7 +1,7 @@
 from itertools import combinations
 from uunet.multinet import empty, add_nx_layer, flatten, layers, to_nx_dict
 from networkx.algorithms.community import greedy_modularity_communities
-from utils.result_helpers import draw_network_clustering_results
+from layer_centrality.utils.result_helpers import draw_network_clustering_results
 
 
 def create_layer_combinations_node_communities(

@@ -1,11 +1,11 @@
 from pandas import DataFrame, Series
 from uunet.multinet import data, vertices, to_nx_dict
-from algo.core.layer_centrality import compute_multinet_layer_centrality
-from algo.functions import compute_shannon_entropy
-from algo.clustering.UncertainDBSCANHelper import UncertainDBSCANHelper
-from utils.result_helpers import get_number_of_layer_most_influenced_nodes, get_max_layer_contribution, \
+from layer_centrality.algo.core.layer_centrality import compute_multinet_layer_centrality
+from layer_centrality.algo.functions import compute_shannon_entropy
+from layer_centrality.algo.clustering.UncertainDBSCANHelper import UncertainDBSCANHelper
+from layer_centrality.utils.result_helpers import get_number_of_layer_most_influenced_nodes, get_max_layer_contribution, \
     get_min_layer_contribution, get_layer_centrality_excel_models, save_layer_centrality_excel_models_as_xlsx
-from utils.centrality_helpers import SubgraphCentralityHelper
+from layer_centrality.utils.centrality_helpers import DegreeCentralityHelper
 
 DATASET_NAME = "aucs"
 
@@ -13,7 +13,7 @@ multilayered_network = data(DATASET_NAME)
 node_list = sorted(set(vertices(multilayered_network)["actor"]))
 nx_layer_dict = to_nx_dict(multilayered_network)
 
-centrality_helper = SubgraphCentralityHelper(nx_layer_dict)
+centrality_helper = DegreeCentralityHelper(nx_layer_dict)
 
 nodes_layer_centrality_dict = compute_multinet_layer_centrality(nx_layer_dict, node_list, centrality_helper)
 nodes_shannon_entropy_dict = compute_shannon_entropy(nodes_layer_centrality_dict)

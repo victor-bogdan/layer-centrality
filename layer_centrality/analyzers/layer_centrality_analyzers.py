@@ -1,10 +1,10 @@
 from pandas import DataFrame
-from algo.core.layer_centrality import compute_multinet_layer_centrality
-from utils.dataset_helpers import AUCSDatasetHelper
-from utils.centrality_helpers import DegreeCentralityHelper, HarmonicCentralityHelper, \
+from layer_centrality.algo.core.layer_centrality import compute_multinet_layer_centrality
+from layer_centrality.utils.dataset_helpers import AUCSDatasetHelper
+from layer_centrality.utils.centrality_helpers import DegreeCentralityHelper, HarmonicCentralityHelper, \
     KatzCentralityHelper, SubgraphCentralityHelper
-from utils.centrality_measure import CentralityMeasure
-from utils.result_helpers import get_layer_influence_class_node_color
+from layer_centrality.utils.centrality_measure import CentralityMeasure
+from layer_centrality.utils.result_helpers import get_layer_influence_class_node_color
 
 
 class AUCSCentralityAnalyzer:
