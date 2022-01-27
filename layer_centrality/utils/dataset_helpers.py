@@ -3,8 +3,11 @@ from uunet.multinet import data, vertices, to_nx_dict
 
 class DatasetHelper:
 
-    # TODO consider other sources for multilayered networks than the uunet library
     def __init__(self, dataset_name):
+        self.__load_dataset(dataset_name)
+
+    # TODO support external datasets loading
+    def __load_dataset(self, dataset_name):
         self.__multilayered_network = data(dataset_name)
         self.__node_list = sorted(set(vertices(self.__multilayered_network)["actor"]))
         self.__nx_layer_dict = to_nx_dict(self.__multilayered_network)
@@ -26,4 +29,4 @@ class DatasetHelper:
         layer_graph = self.__nx_layer_dict[layer_name]
         for node in self.__node_list:
             node_edges = node_edges + list(layer_graph.edges(node))
-        return node_edges
+        return set([tuple(sorted(i)) for i in node_edges])
