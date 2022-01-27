@@ -7,6 +7,9 @@ from layer_centrality.utils.data_helpers import get_node_connections_on_layers
 from uunet.multinet import empty, add_nx_layer, flatten, layers, to_nx_dict
 
 
+CENTRALITY_MEASURES = ["degree", "harmonic", "katz", "subgraph"]
+
+
 class CentralityHelper:
 
     layer_combinations_node_centrality_dict = {}
