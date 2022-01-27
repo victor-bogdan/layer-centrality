@@ -1,13 +1,23 @@
 from uunet.multinet import data, vertices, to_nx_dict
 
 
+UUNET_DATASETS = ["aucs"]
+
+
 class DatasetHelper:
 
     def __init__(self, dataset_name):
+        self.__multilayered_network = None
+        self.__node_list = []
+        self.__nx_layer_dict = {}
         self.__load_dataset(dataset_name)
 
     # TODO support external datasets loading
     def __load_dataset(self, dataset_name):
+        if dataset_name in UUNET_DATASETS:
+            self.__load_uunet_dataset(dataset_name)
+
+    def __load_uunet_dataset(self, dataset_name):
         self.__multilayered_network = data(dataset_name)
         self.__node_list = sorted(set(vertices(self.__multilayered_network)["actor"]))
         self.__nx_layer_dict = to_nx_dict(self.__multilayered_network)
