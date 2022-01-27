@@ -2,7 +2,6 @@ from pandas import DataFrame
 from layer_centrality.algo.core.layer_centrality import compute_multinet_layer_centrality
 from layer_centrality.utils.centrality_helpers import DegreeCentralityHelper, HarmonicCentralityHelper, \
     KatzCentralityHelper, SubgraphCentralityHelper
-from layer_centrality.utils.centrality_measure import CentralityMeasure
 
 
 class LayerCentralityAnalyzer:
@@ -14,13 +13,13 @@ class LayerCentralityAnalyzer:
 
     def get_layer_centrality(self, centrality_measure):
 
-        if centrality_measure == CentralityMeasure.Degree:
+        if centrality_measure.lower() == "degree":
             centrality_helper = DegreeCentralityHelper(self.__dataset_helper.get_nx_layer_dict())
-        elif centrality_measure == CentralityMeasure.Harmonic:
+        elif centrality_measure.lower() == "harmonic":
             centrality_helper = HarmonicCentralityHelper(self.__dataset_helper.get_nx_layer_dict())
-        elif centrality_measure == CentralityMeasure.Katz:
+        elif centrality_measure.lower() == "katz":
             centrality_helper = KatzCentralityHelper(self.__dataset_helper.get_nx_layer_dict())
-        elif centrality_measure == CentralityMeasure.Subgraph:
+        elif centrality_measure.lower() == "subgraph":
             centrality_helper = SubgraphCentralityHelper(self.__dataset_helper.get_nx_layer_dict())
         else:
             return self.__results_data_frame
