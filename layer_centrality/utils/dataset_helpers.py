@@ -1,6 +1,9 @@
 from uunet.multinet import data, vertices, to_nx_dict
 
 
+UUNET_DATASETS = ["aucs"]
+
+
 class DatasetHelper:
 
     def __init__(self, dataset_name):
