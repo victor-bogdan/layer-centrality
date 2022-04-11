@@ -291,7 +291,7 @@ def save_results_data_frame_as_csv(data_set_name, centrality_measure, results_da
 
     project_root_path = dirname(dirname(__file__))
 
-    results_data_frame.to_csv('{0}/layer_centrality/internal/results/{1}/{2}/{1}_{2}_results.csv'.format(
+    results_data_frame.to_csv('{0}/internal/results/{1}/{2}/{1}_{2}_results.csv'.format(
         project_root_path, data_set_name, centrality_measure), encoding='utf-16')
 
     # print(results_data_frame)
@@ -313,7 +313,7 @@ def save_layer_centrality_excel_models_as_xlsx(
 
     project_root_path = dirname(dirname(__file__))
 
-    writer = ExcelWriter('{0}/layer_centrality/internal/results/{1}/{2}/{1}_{2}_results.xlsx'.format(
+    writer = ExcelWriter('{0}/internal/results/{1}/{2}/{1}_{2}_results.xlsx'.format(
         project_root_path, data_set_name, centrality_measure), engine='xlsxwriter')
 
     workbook = writer.book
@@ -359,7 +359,7 @@ def save_results_analysis_data_frames_as_xlsx(
 
     project_root_path = dirname(dirname(__file__))
 
-    writer = ExcelWriter('{0}/layer_centrality/internal/results/{1}/{2}/{1}_{2}_results_analysis.xlsx'.format(
+    writer = ExcelWriter('{0}/internal/results/{1}/{2}/{1}_{2}_results_analysis.xlsx'.format(
         project_root_path, data_set_name, centrality_measure), engine='xlsxwriter')
 
     for results_analysis_data_frame in results_analysis_data_frame_list:
