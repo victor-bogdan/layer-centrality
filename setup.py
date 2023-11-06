@@ -14,7 +14,6 @@ setup(
         "fonttools==4.44.0",
         "joblib==1.3.2",
         "kiwisolver==1.4.5",
-        "layer-centrality==0.1.0",
         "matplotlib==3.5.3",
         "networkx==2.6.3",
         "numpy==1.22.4",
