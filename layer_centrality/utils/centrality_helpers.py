@@ -218,7 +218,7 @@ class HarmonicCentralityHelper(CentralityHelper):
 
     def get_node_centrality_dict(self, flattened_layer):
         """
-        Returns a dictionary which contains the game theoretic centrality measure for each node in :param flattened_layer,
+        Returns a dictionary which contains the harmonic centrality measure for each node in :param flattened_layer,
         obtained from a combination of layers.
 
         :param flattened_layer: Networkx network which represents a flattened multilayered network, to which
