@@ -2,13 +2,13 @@ from setuptools import setup, find_packages
 
 setup(
     name='layer-centrality',
-    version='0.1.0',
+    version='0.1.1',
     packages=find_packages(),
     url='',
     license='Apache 2.0',
     author='Victor',
     author_email='victor199704@gmail.com',
-    description='A package used for computing layer centrality in multilayered networks',
+    description='A package used for computing layer centrality in multilayered networks.',
     install_requires=[
         "cycler==0.11.0",
         "fonttools==4.29.0",
