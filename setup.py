@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='layer-centrality',
-    version='1.0.0',
+    version='1.0.1',
     packages=find_packages(),
     url='',
     license='Apache 2.0',
@@ -31,6 +31,7 @@ setup(
         "six==1.16.0",
         "threadpoolctl==3.2.0",
         "uunet==1.1.4",
-        "XlsxWriter==3.17.0"
+        "XlsxWriter==3.1.9",
+        "zipp==3.17.0"
     ]
 )
