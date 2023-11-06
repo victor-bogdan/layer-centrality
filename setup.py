@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='layer-centrality',
-    version='0.1.2',
+    version='1.0.0',
     packages=find_packages(),
     url='',
     license='Apache 2.0',
@@ -13,7 +13,7 @@ setup(
         "contourpy==1.2.0",
         "cycler==0.12.1",
         "fonttools==4.44.0",
-        "importlib-resources==6.1.0"
+        "importlib-resources==6.1.0",
         "joblib==1.3.2",
         "kiwisolver==1.4.5",
         "matplotlib==3.8.1",
