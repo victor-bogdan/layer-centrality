@@ -8,7 +8,7 @@ The proposed layer centrality analysis works with the following setup:
 
 ## Master Thesis - Layer Centrality in Multilayered Networks
 
-The algorithm which is proposed in [Layer Centrality in Multilayered Networks](http://localhost/documents/layer_centrality_in_multilayered_networks.pdf) aims at providing an efficient method of determining the influence of a layer with respect to a node in a multilayered network. It was developed during the master thesis of [Victor Bogdan](https://scholar.google.com/citations?user=eeKVSEwAAAAJ&hl=en&oi=ao) under the coordination of [Gabriel Istrate](https://scholar.google.com/citations?user=KmuHvIwAAAAJ&hl=en&authuser=2&oi=ao) and [Cosmin Bonchis](https://scholar.google.com/citations?user=p2XrjbAAAAAJ&hl=en&authuser=2&oi=ao) at the West University of Timisoara, Faculty of Mathematics and Informatics.
+The algorithm which is proposed in [Layer Centrality in Multilayered Networks](layer_centrality/resources/documentation/files/layer_centrality_in_multilayered_networks.pdf) aims at providing an efficient method of determining the influence of a layer with respect to a node in a multilayered network. It was developed during the master thesis of [Victor Bogdan](https://scholar.google.com/citations?user=eeKVSEwAAAAJ&hl=en&oi=ao) under the coordination of [Gabriel Istrate](https://scholar.google.com/citations?user=KmuHvIwAAAAJ&hl=en&authuser=2&oi=ao) and [Cosmin Bonchis](https://scholar.google.com/citations?user=p2XrjbAAAAAJ&hl=en&authuser=2&oi=ao) at the West University of Timisoara, Faculty of Mathematics and Informatics.
 
 ### Methodology
 
